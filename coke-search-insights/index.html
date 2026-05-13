@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coca-Cola DAM Search Analytics — 2025 Insights</title>
+  <style>
+    :root {
+      --bg: #0f1014;
+      --surface: #1a1c22;
+      --surface2: #22252e;
+      --border: #2e3140;
+      --text: #e8eaf0;
+      --muted: #8b8fa8;
+      --dim: #5a5e72;
+      --red: #F40009;
+      --red-soft: #f87171;
+      --green: #22c55e;
+      --orange: #fb923c;
+      --yellow: #fbbf24;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,16,20,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 24px;
+      height: 48px;
+    }
+    nav .nav-brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.04em;
+      margin-right: 16px;
+      white-space: nowrap;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+      white-space: nowrap;
+    }
+    nav a:hover { color: var(--text); background: var(--surface2); }
+
+    /* HERO */
+    header {
+      padding: 56px 32px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    header .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    header h1 span { color: var(--red); }
+    header p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 620px;
+    }
+
+    /* KPI STRIP */
+    .kpi-strip {
+      max-width: 1280px;
+      margin: 0 auto 40px;
+      padding: 0 32px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      flex: 1;
+      min-width: 160px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+    .kpi-card .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .kpi-card .kpi-value.red { color: var(--red-soft); }
+    .kpi-card .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* SECTIONS */
+    .sections-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+    section {
+      scroll-margin-top: 60px;
+    }
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .section-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--red);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .section-head-text h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .section-head-text p {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 680px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card-inner {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table thead th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 0 12px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    table thead th:first-child { padding-left: 0; }
+    table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    table tbody tr:last-child { border-bottom: none; }
+    table tbody tr:hover { background: rgba(255,255,255,0.025); }
+    table tbody td {
+      padding: 10px 12px;
+      vertical-align: middle;
+    }
+    table tbody td:first-child { padding-left: 0; }
+    .rank-num {
+      color: var(--dim);
+      font-size: 12px;
+      font-weight: 600;
+      width: 28px;
+    }
+    .term-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(59,130,246,0.15);
+      color: var(--blue);
+    }
+    .term-tag.templates {
+      background: rgba(168,85,247,0.15);
+      color: var(--purple);
+    }
+    .bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mini-bar-track {
+      width: 80px;
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .mini-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+    .rate-pct {
+      font-size: 12px;
+      font-weight: 700;
+      min-width: 38px;
+    }
+
+    /* FUNNEL SECTION */
+    .funnel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 700px) { .funnel-grid { grid-template-columns: 1fr; } }
+    #funnel-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .funnel-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .funnel-label {
+      font-size: 12px;
+      color: var(--muted);
+      width: 110px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .funnel-track {
+      flex: 1;
+      height: 20px;
+      background: var(--surface2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .funnel-fill {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      white-space: nowrap;
+      transition: width 0.6s ease;
+    }
+    .funnel-meta {
+      font-size: 11px;
+      color: var(--dim);
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    /* OVERLAP SECTION */
+    .overlap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 800px) { .overlap-grid { grid-template-columns: 1fr; } }
+    .overlap-col {
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid;
+    }
+    .overlap-col.top20 { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.05); }
+    .overlap-col.both  { border-color: rgba(244,0,9,0.35); background: rgba(244,0,9,0.05); }
+    .overlap-col.zero  { border-color: rgba(251,146,60,0.4); background: rgba(251,146,60,0.05); }
+    .overlap-col-title {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .overlap-col.top20 .overlap-col-title { color: var(--green); }
+    .overlap-col.both  .overlap-col-title { color: var(--red-soft); }
+    .overlap-col.zero  .overlap-col-title { color: var(--orange); }
+    .overlap-count {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .overlap-col.top20 .overlap-count { color: var(--green); }
+    .overlap-col.both  .overlap-count { color: var(--red-soft); }
+    .overlap-col.zero  .overlap-count { color: var(--orange); }
+    .overlap-terms {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .overlap-term {
+      font-size: 12px;
+      color: var(--muted);
+      padding: 2px 0;
+    }
+    .insight-callout {
+      background: rgba(244,0,9,0.08);
+      border: 1px solid rgba(244,0,9,0.25);
+      border-left: 3px solid var(--red);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .insight-callout strong { color: var(--text); }
+    .overlap-stat {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .overlap-stat .big { font-size: 48px; font-weight: 900; color: var(--red); line-height: 1; }
+    .overlap-stat .sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    /* REGIONAL */
+    .reg-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 800px) { .reg-grid { grid-template-columns: 1fr; } }
+
+    /* ROLE CARDS */
+    .role-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 900px) { .role-cards { grid-template-columns: repeat(2,1fr); } }
+    .role-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .role-card .role-name {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--dim);
+      margin-bottom: 10px;
+    }
+    .role-card .role-spu {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .role-card .role-spu-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .role-card .role-stat {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .role-card .role-stat strong { color: var(--text); }
+    .intensity-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .intensity-low    { background: rgba(34,197,94,0.15);  color: var(--green); }
+    .intensity-medium { background: rgba(251,191,36,0.15); color: var(--yellow); }
+    .intensity-high   { background: rgba(251,146,60,0.15); color: var(--orange); }
+    .intensity-power  { background: rgba(244,0,9,0.15);    color: var(--red-soft); }
+
+    canvas { display: block; }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">&#x25CF; COKE DAM</span>
+  <a href="#s1">Zero-Result</a>
+  <a href="#s2">Funnel</a>
+  <a href="#s3">Overlap</a>
+  <a href="#s4">Regions</a>
+  <a href="#s5">Trends</a>
+  <a href="#s6">Roles</a>
+</nav>
+
+<header>
+  <div class="eyebrow">Digital Asset Management · Search Analytics · 2025</div>
+  <h1>Coca-Cola DAM<br><span>Search Insights</span></h1>
+  <p>Search behavior analysis across the Coca-Cola global DAM platform. Data spans Jan–May 2025 across all regions, roles, and asset types.</p>
+</header>
+
+<div class="kpi-strip" id="kpi-strip">
+  <!-- built by JS -->
+</div>
+
+<!-- S1 -->
+<div class="sections-wrap">
+<section id="s1">
+  <div class="section-head">
+    <div class="section-badge">1</div>
+    <div class="section-head-text">
+      <h2>Zero-Result Rate per Search Term</h2>
+      <p>The top 20 searched terms reveal a systemic discovery failure — most terms have failure rates above 75%, indicating widespread content gaps or indexing issues in the asset library.</p>
+    </div>
+  </div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:32px">#</th>
+          <th>Search Term</th>
+          <th>Type</th>
+          <th>Total Searches</th>
+          <th>Zero-Result</th>
+          <th>Failure Rate</th>
+        </tr>
+      </thead>
+      <tbody id="zr-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- S2 -->
+<section id="s2">
+  <div class="section-head">
+    <div class="section-badge">2</div>
+    <div class="section-head-text">
+      <h2>Search Success Funnel</h2>
+      <p>78.9% of all searches return zero results. Only 8.7% of searches yield more than 100 results — meaning most users who do get results receive very small sets.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="funnel-grid">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;">Result Distribution</div>
+        <div id="funnel-bars"></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;">Composition</div>
+        <canvas id="funnelDonut" style="width:100%;height:260px;display:block;"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 -->
+<section id="s3">
+  <div class="section-head">
+    <div class="section-badge">3</div>
+    <div class="section-head-text">
+      <h2>Term Overlap Analysis</h2>
+      <p>90% of the top zero-result search terms are also in the top 20 overall — confirming that popular content is precisely what's missing from the library.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="overlap-stat">
+      <div class="big">90%</div>
+      <div class="sub">of top-20 searches also appear in the zero-result list</div>
+    </div>
+    <div class="overlap-grid">
+      <div class="overlap-col top20">
+        <div class="overlap-col-title">Top 20 Only</div>
+        <div class="overlap-count">2</div>
+        <div class="overlap-terms">
+          <div class="overlap-term">smartwater</div>
+          <div class="overlap-term">#CCIconDesign2Productphoto</div>
+        </div>
+      </div>
+      <div class="overlap-col both">
+        <div class="overlap-col-title">In Both &mdash; 18 Terms</div>
+        <div class="overlap-count">18</div>
+        <div class="overlap-terms" id="both-terms"></div>
+      </div>
+      <div class="overlap-col zero">
+        <div class="overlap-col-title">Zero-Result Only</div>
+        <div class="overlap-count">2+</div>
+        <div class="overlap-terms">
+          <div class="overlap-term">core power</div>
+          <div class="overlap-term">coke</div>
+          <div class="overlap-term" style="color:var(--dim);font-size:11px;">…and many more long-tail</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-callout">
+      <strong>Key finding:</strong> The overlap proves this is not a niche problem. The most-searched brand terms — FIFA, Fanta, Sprite, A250 — are exactly the content users can't find. Fixing metadata and ingestion for these 18 terms would address the majority of search failure volume.
+    </div>
+  </div>
+</section>
+
+<!-- S4 -->
+<section id="s4">
+  <div class="section-head">
+    <div class="section-badge">4</div>
+    <div class="section-head-text">
+      <h2>Regional Gap Map</h2>
+      <p>North America dominates volume (59.8%), but JSK and GCM show the highest search intensity per searcher, suggesting power users in smaller regions who rely heavily on the DAM.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="reg-grid">
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Region</th>
+              <th>Searchers</th>
+              <th>Total Searches</th>
+              <th>% of Total</th>
+              <th>Searches / Searcher</th>
+            </tr>
+          </thead>
+          <tbody id="reg-tbody"></tbody>
+        </table>
+      </div>
+      <div>
+        <canvas id="regionalChart" style="width:100%;height:320px;display:block;"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S5 -->
+<section id="s5">
+  <div class="section-head">
+    <div class="section-badge">5</div>
+    <div class="section-head-text">
+      <h2>Monthly Trend</h2>
+      <p>The platform saw dramatic growth from February to April, peaking at 136,443 searches in April (3,296 unique searchers). May shows a natural post-campaign decline with the platform still actively used.</p>
+    </div>
+  </div>
+  <div class="card">
+    <canvas id="trendChart" style="width:100%;height:340px;display:block;"></canvas>
+  </div>
+</section>
+
+<!-- S6 -->
+<section id="s6">
+  <div class="section-head">
+    <div class="section-badge">6</div>
+    <div class="section-head-text">
+      <h2>Role-Based Search Behavior</h2>
+      <p>Agency users search the most intensively (77 searches/user), while Associates and Bottlers form the largest user bases. Understanding role-specific needs can drive better content curation strategies.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="role-cards" id="role-cards"></div>
+    <canvas id="roleChart" style="width:100%;height:280px;display:block;"></canvas>
+  </div>
+</section>
+</div><!-- end sections-wrap -->
+
+<script src="charts.js"></script>
+</body>
+</html>
