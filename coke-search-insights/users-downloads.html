@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coca-Cola DAM — Users &amp; Downloads Insights</title>
+  <style>
+    :root {
+      --bg: #0f1014;
+      --surface: #1a1c22;
+      --surface2: #22252e;
+      --border: #2e3140;
+      --text: #e8eaf0;
+      --muted: #8b8fa8;
+      --dim: #5a5e72;
+      --red: #F40009;
+      --red-soft: #f87171;
+      --green: #22c55e;
+      --orange: #fb923c;
+      --yellow: #fbbf24;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --teal: #14b8a6;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,16,20,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 24px;
+      height: 48px;
+      overflow-x: auto;
+    }
+    nav .nav-brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.04em;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+    nav .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 8px;
+      flex-shrink: 0;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+      white-space: nowrap;
+    }
+    nav a:hover { color: var(--text); background: var(--surface2); }
+    nav a.back-link {
+      color: var(--dim);
+      font-size: 11px;
+      border: 1px solid var(--border);
+    }
+    nav a.back-link:hover { color: var(--muted); }
+
+    /* HERO */
+    header {
+      padding: 56px 32px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    header .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    header h1 span { color: var(--red); }
+    header p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 680px;
+    }
+
+    /* KPI STRIP */
+    .kpi-strip {
+      max-width: 1280px;
+      margin: 0 auto 40px;
+      padding: 0 32px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      flex: 1;
+      min-width: 150px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+    .kpi-card .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .kpi-card .kpi-value.red { color: var(--red-soft); }
+    .kpi-card .kpi-value.green { color: var(--green); }
+    .kpi-card .kpi-value.orange { color: var(--orange); }
+    .kpi-card .kpi-value.blue { color: var(--blue); }
+    .kpi-card .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .kpi-card .kpi-sub {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    /* INSIGHT CARDS GRID */
+    .insight-cards {
+      max-width: 1280px;
+      margin: 0 auto 48px;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .insight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .insight-card.red-accent::before { background: var(--red); }
+    .insight-card.orange-accent::before { background: var(--orange); }
+    .insight-card.yellow-accent::before { background: var(--yellow); }
+    .insight-card.blue-accent::before { background: var(--blue); }
+    .insight-card .ic-stat {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .insight-card.red-accent .ic-stat { color: var(--red-soft); }
+    .insight-card.orange-accent .ic-stat { color: var(--orange); }
+    .insight-card.yellow-accent .ic-stat { color: var(--yellow); }
+    .insight-card.blue-accent .ic-stat { color: var(--blue); }
+    .insight-card .ic-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .insight-card .ic-body {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* SECTIONS */
+    .sections-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+    section { scroll-margin-top: 60px; }
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .section-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .section-head-text h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .section-head-text p {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 720px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card-inner {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 740px) { .two-col { grid-template-columns: 1fr; } }
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 740px) { .three-col { grid-template-columns: 1fr; } }
+
+    /* CHART LABELS */
+    .chart-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 12px;
+    }
+    canvas { display: block; }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table thead th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 0 10px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    table thead th:first-child { padding-left: 0; }
+    table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    table tbody tr:last-child { border-bottom: none; }
+    table tbody tr:hover { background: rgba(255,255,255,0.025); }
+    table tbody td {
+      padding: 9px 10px;
+      vertical-align: middle;
+    }
+    table tbody td:first-child { padding-left: 0; }
+    .num-right { text-align: right; }
+    .bold { font-weight: 700; }
+    .muted { color: var(--muted); }
+    .dim { color: var(--dim); }
+    .green-text { color: var(--green); font-weight: 700; }
+    .red-text { color: var(--red-soft); font-weight: 700; }
+    .orange-text { color: var(--orange); font-weight: 700; }
+
+    /* CALLOUT */
+    .callout {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+    .callout.warn { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); }
+    .callout.info { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); }
+    .callout.success { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); }
+    .callout.danger { background: rgba(244,0,9,0.08); border: 1px solid rgba(244,0,9,0.2); }
+    .callout-icon { font-size: 16px; line-height: 1.4; flex-shrink: 0; }
+    .callout-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .callout-text strong { color: var(--text); }
+
+    /* MINI STAT ROW */
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .stat-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+    }
+    .stat-pill .sp-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-pill .sp-label {
+      font-size: 11px;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 2px;
+    }
+
+    /* RANK BADGE */
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      background: var(--surface2);
+      color: var(--dim);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .rank-badge.top { background: rgba(244,0,9,0.15); color: var(--red-soft); }
+
+    /* LEGEND */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* FOOTER */
+    footer {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 32px 48px;
+      border-top: 1px solid var(--border);
+      color: var(--dim);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+      gap: 12px;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-brand">COKE DAM</span>
+    <a href="index.html" class="back-link">← Search Insights</a>
+    <div class="nav-divider"></div>
+    <a href="#findings">Key Findings</a>
+    <a href="#s1">1 Funnel</a>
+    <a href="#s2">2 Login Intensity</a>
+    <a href="#s3">3 Onboarding</a>
+    <a href="#s4">4 Role Behavior</a>
+    <a href="#s5">5 Campaigns</a>
+    <a href="#s6">6 YoY Trends</a>
+  </nav>
+
+  <!-- HERO -->
+  <header>
+    <div class="eyebrow">Coca-Cola DAM Analytics · 2025 YTD</div>
+    <h1>Users &amp; Downloads <span>Insights</span></h1>
+    <p>Cross-report analysis of login behavior, user activation, and download patterns across roles, regions, and campaigns. Data covers Jan–May 2025.</p>
+  </header>
+
+  <!-- TOP KPIs -->
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-value">5,117</div>
+      <div class="kpi-label">Unique Users</div>
+      <div class="kpi-sub">Logged in YTD</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value">5,118</div>
+      <div class="kpi-label">First-Time Users</div>
+      <div class="kpi-sub">New registrations</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value green">2,667</div>
+      <div class="kpi-label">Unique Downloaders</div>
+      <div class="kpi-sub">52.1% of users</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value orange">30,357</div>
+      <div class="kpi-label">Total Downloads</div>
+      <div class="kpi-sub">27,738 assets · 2,619 templates</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value red">55,124</div>
+      <div class="kpi-label">Total Logins</div>
+      <div class="kpi-sub">10.8 per user avg</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value blue">−11%</div>
+      <div class="kpi-label">YoY Downloads</div>
+      <div class="kpi-sub">vs. same period 2024</div>
+    </div>
+  </div>
+
+  <!-- KEY FINDINGS CARDS -->
+  <div id="findings" style="max-width:1280px;margin:0 auto 12px;padding:0 32px;">
+    <div class="chart-label" style="margin-bottom:16px;">Key Findings Across Reports</div>
+  </div>
+  <div class="insight-cards">
+    <div class="insight-card red-accent">
+      <div class="ic-stat">52.1%</div>
+      <div class="ic-title">Download Gap</div>
+      <div class="ic-body">Only half of logged-in users ever download anything. 2,450 users log in and browse but never convert to a download — a key content relevance signal.</div>
+    </div>
+    <div class="insight-card orange-accent">
+      <div class="ic-stat">16.9×</div>
+      <div class="ic-title">NA Login Outlier</div>
+      <div class="ic-body">NA users average 16.9 logins per user — 2.8× more than the next highest region (INSWA at 6.2×). Every other region sits between 3–6×.</div>
+    </div>
+    <div class="insight-card yellow-accent">
+      <div class="ic-stat">47.5%</div>
+      <div class="ic-title">Unattributed Downloads</div>
+      <div class="ic-body">13,974 of 30,357 downloads (10,287 + 3,687) have no proper campaign tagging — labeled "None" or "unknown". A significant metadata gap.</div>
+    </div>
+    <div class="insight-card blue-accent">
+      <div class="ic-stat">16.3×</div>
+      <div class="ic-title">Agency Efficiency</div>
+      <div class="ic-body">Agency users download 16.3 assets each on average — 2.3× more than Associates (7.1). Despite being 21.6% of users, they account for 30.8% of all downloads.</div>
+    </div>
+  </div>
+
+  <!-- SECTIONS -->
+  <div class="sections-wrap">
+
+    <!-- ═══ SECTION 1: ENGAGEMENT FUNNEL ═══ -->
+    <section id="s1">
+      <div class="section-head">
+        <div class="section-badge">1</div>
+        <div class="section-head-text">
+          <h2>From Visitor to Downloader</h2>
+          <p>Of 5,117 users who logged in, only 52.1% ever downloaded anything. The funnel reveals where engagement drops off and highlights a content relevance opportunity.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="two-col">
+          <div>
+            <div class="chart-label">Engagement Funnel</div>
+            <canvas id="funnelCanvas" width="420" height="320"></canvas>
+            <div class="legend" style="margin-top:16px;">
+              <div class="legend-item"><div class="legend-dot" style="background:#F40009;"></div> Unique Users</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#fb923c;"></div> Unique Searchers</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#22c55e;"></div> Unique Downloaders</div>
+            </div>
+          </div>
+          <div>
+            <div class="chart-label">Funnel Steps</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Stage</th>
+                  <th class="num-right">Count</th>
+                  <th class="num-right">% of Users</th>
+                  <th class="num-right">Drop-off</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="bold">Unique Users</td>
+                  <td class="num-right bold">5,117</td>
+                  <td class="num-right bold">100%</td>
+                  <td class="num-right dim">—</td>
+                </tr>
+                <tr>
+                  <td class="bold">Unique Searchers</td>
+                  <td class="num-right bold">4,479</td>
+                  <td class="num-right orange-text">87.5%</td>
+                  <td class="num-right muted">−638</td>
+                </tr>
+                <tr>
+                  <td class="bold">Unique Downloaders</td>
+                  <td class="num-right bold">2,667</td>
+                  <td class="num-right green-text">52.1%</td>
+                  <td class="num-right muted">−1,812</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="callout danger" style="margin-top:20px;">
+              <div class="callout-icon">⚠</div>
+              <div class="callout-text"><strong>47.9% engagement gap.</strong> Nearly half of all logged-in users browse (and search) but never download. This suggests either content discoverability issues or users relying on external sources.</div>
+            </div>
+
+            <div class="stat-row">
+              <div class="stat-pill">
+                <div class="sp-val" style="color:var(--red-soft);">2,450</div>
+                <div class="sp-label">Non-downloading users</div>
+              </div>
+              <div class="stat-pill">
+                <div class="sp-val" style="color:var(--orange);">1,812</div>
+                <div class="sp-label">Searchers who don't DL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 2: LOGIN INTENSITY ═══ -->
+    <section id="s2">
+      <div class="section-head">
+        <div class="section-badge">2</div>
+        <div class="section-head-text">
+          <h2>Login Intensity — Who's Most Engaged?</h2>
+          <p>NA dominates raw login counts with 43,923 logins, but normalizing by user count reveals INSWA (6.2×) and JSK (6.1×) as the most engaged per-user regions. EME shows the lowest engagement at 3.1×.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="two-col">
+          <div>
+            <div class="chart-label">Logins per User by Region</div>
+            <canvas id="loginIntensityCanvas" width="420" height="340"></canvas>
+            <div class="callout info" style="margin-top:12px;">
+              <div class="callout-icon">◆</div>
+              <div class="callout-text"><strong>NA is a statistical outlier.</strong> At 16.9 logins/user, NA's intensity is 2.8× higher than the next region. This reflects NA's mature user base returning frequently — or power-user behavior from a core team.</div>
+            </div>
+          </div>
+          <div>
+            <div class="chart-label">Region Breakdown</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Region</th>
+                  <th class="num-right">Users</th>
+                  <th class="num-right">Logins</th>
+                  <th class="num-right">Logins/User</th>
+                </tr>
+              </thead>
+              <tbody id="loginIntensityTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 3: ONBOARDING WAVE ═══ -->
+    <section id="s3">
+      <div class="section-head">
+        <div class="section-badge">3</div>
+        <div class="section-head-text">
+          <h2>New User Onboarding Pattern</h2>
+          <p>The platform launched mid-March 2025 with a massive activation wave — 100% of March visitors were brand new. As the platform matures, the new-to-returning ratio shifts toward repeat visits.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="two-col">
+          <div>
+            <div class="chart-label">New vs. Returning Users (Mar–May)</div>
+            <canvas id="onboardingCanvas" width="420" height="300"></canvas>
+            <div class="legend" style="margin-top:12px;">
+              <div class="legend-item"><div class="legend-dot" style="background:#F40009;"></div> New Users</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div> Returning Users</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#fbbf24; border-radius:50%;"></div> % New (line)</div>
+            </div>
+          </div>
+          <div>
+            <div class="chart-label">Monthly Activation Breakdown</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th class="num-right">Visitors</th>
+                  <th class="num-right">New</th>
+                  <th class="num-right">Returning</th>
+                  <th class="num-right">% New</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="bold">Mar</td>
+                  <td class="num-right">2,335</td>
+                  <td class="num-right" style="color:var(--red-soft);">2,333</td>
+                  <td class="num-right dim">2</td>
+                  <td class="num-right bold">100%</td>
+                </tr>
+                <tr>
+                  <td class="bold">Apr</td>
+                  <td class="num-right">3,752</td>
+                  <td class="num-right" style="color:var(--red-soft);">2,203</td>
+                  <td class="num-right" style="color:var(--blue);">1,549</td>
+                  <td class="num-right bold">59%</td>
+                </tr>
+                <tr>
+                  <td class="bold">May</td>
+                  <td class="num-right">2,230</td>
+                  <td class="num-right" style="color:var(--red-soft);">579</td>
+                  <td class="num-right" style="color:var(--blue);">1,651</td>
+                  <td class="num-right bold">26%</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="callout success" style="margin-top:20px;">
+              <div class="callout-icon">↗</div>
+              <div class="callout-text"><strong>Healthy platform maturation.</strong> Returning users grew from ~0 in March to 1,651 in May (+74% month-over-month). The declining % new is expected as the installed base grows — 26% new in May means the platform is still actively acquiring users.</div>
+            </div>
+
+            <div class="chart-label" style="margin-top:20px;">Monthly Login Events</div>
+            <canvas id="loginEventsCanvas" width="380" height="160"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 4: ROLE DOWNLOAD BEHAVIOR ═══ -->
+    <section id="s4">
+      <div class="section-head">
+        <div class="section-badge">4</div>
+        <div class="section-head-text">
+          <h2>Download Behavior by Role</h2>
+          <p>Agency users punch above their weight — they represent 21.6% of unique downloaders but account for 30.8% of total downloads, averaging 16.3 per person. Bottlers are close behind at 15.8 downloads/person.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="two-col">
+          <div>
+            <div class="chart-label">Downloads per Downloader by Role</div>
+            <canvas id="roleDlPerPersonCanvas" width="420" height="220"></canvas>
+
+            <div class="chart-label" style="margin-top:24px;">Share of Downloaders vs Share of Downloads</div>
+            <canvas id="roleShareCanvas" width="420" height="200"></canvas>
+            <div class="legend" style="margin-top:10px;">
+              <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div> % of Downloaders</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#F40009;"></div> % of Downloads</div>
+            </div>
+          </div>
+          <div>
+            <div class="chart-label">Role Breakdown</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th class="num-right">Downloaders</th>
+                  <th class="num-right">Downloads</th>
+                  <th class="num-right">DL/Person</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="bold">Associate</td>
+                  <td class="num-right">1,369</td>
+                  <td class="num-right">9,694</td>
+                  <td class="num-right orange-text">7.1</td>
+                </tr>
+                <tr>
+                  <td class="bold">Agency</td>
+                  <td class="num-right">577</td>
+                  <td class="num-right">9,380</td>
+                  <td class="num-right green-text">16.3</td>
+                </tr>
+                <tr>
+                  <td class="bold">Bottler</td>
+                  <td class="num-right">771</td>
+                  <td class="num-right">12,203</td>
+                  <td class="num-right" style="color:var(--teal);font-weight:700;">15.8</td>
+                </tr>
+                <tr style="border-top:2px solid var(--border);">
+                  <td class="bold dim">Total</td>
+                  <td class="num-right bold">2,717</td>
+                  <td class="num-right bold">31,277</td>
+                  <td class="num-right bold muted">11.5</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="callout info" style="margin-top:20px;">
+              <div class="callout-icon">◆</div>
+              <div class="callout-text"><strong>Bottlers drive the most total downloads</strong> (12,203 — 39.0% of total) despite being only 28.4% of downloaders. Agency efficiency at 16.3/person is notable for targeted, high-value asset retrieval.</div>
+            </div>
+
+            <div class="chart-label" style="margin-top:20px;">Users vs Downloaders by Role</div>
+            <canvas id="roleUsersDlCanvas" width="380" height="200"></canvas>
+            <div class="legend" style="margin-top:10px;">
+              <div class="legend-item"><div class="legend-dot" style="background:#8b8fa8;"></div> Total Users</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#22c55e;"></div> Downloaders</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 5: CAMPAIGNS ═══ -->
+    <section id="s5">
+      <div class="section-head">
+        <div class="section-badge">5</div>
+        <div class="section-head-text">
+          <h2>What Content Gets Downloaded?</h2>
+          <p>FIFA World Cup 2026 is the clear top tagged campaign with 4,924 downloads. But 47.5% of all downloads (13,974) have no proper campaign attribution — a significant metadata gap affecting ROI measurement.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="chart-label">Top 10 Campaigns by Downloads</div>
+        <canvas id="campaignCanvas" width="1100" height="380" style="max-width:100%;"></canvas>
+        <div class="callout warn" style="margin-top:16px;">
+          <div class="callout-icon">▲</div>
+          <div class="callout-text"><strong>47.5% of downloads are unattributed</strong> — campaigns labeled "None (untagged)" or "unknown" account for 10,287 + 3,687 = 13,974 of 30,357 total downloads. Without campaign tagging, it's impossible to measure which creative programs drive the most asset usage. Recommend mandatory campaign tagging on asset upload.</div>
+        </div>
+        <div style="margin-top:20px;">
+          <div class="chart-label">Campaign Detail Table</div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:28px;">#</th>
+                <th>Campaign</th>
+                <th>Brand</th>
+                <th class="num-right">OUs</th>
+                <th class="num-right">Downloaders</th>
+                <th class="num-right">Downloads</th>
+              </tr>
+            </thead>
+            <tbody id="campaignTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 6: YoY TRENDS ═══ -->
+    <section id="s6">
+      <div class="section-head">
+        <div class="section-badge">6</div>
+        <div class="section-head-text">
+          <h2>Year-over-Year: Who's Growing, Who's Declining?</h2>
+          <p>Overall downloads are down 11% YoY, but the story varies dramatically by region. INSWA (+167%), AFR (+107%), and ASP (+6%) are growing — while EU (−25%) and NA (−17%) are dragging the total down despite being the largest markets.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="two-col">
+          <div>
+            <div class="chart-label">YoY Total Download Change by Region</div>
+            <canvas id="yoyCanvas" width="420" height="380"></canvas>
+          </div>
+          <div>
+            <div class="chart-label">Full YoY Breakdown</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Region</th>
+                  <th class="num-right">Downloaders%</th>
+                  <th class="num-right">Asset DL%</th>
+                  <th class="num-right">Template DL%</th>
+                  <th class="num-right">Total DL%</th>
+                </tr>
+              </thead>
+              <tbody id="yoyTable"></tbody>
+            </table>
+
+            <div class="callout success" style="margin-top:16px;">
+              <div class="callout-icon">↗</div>
+              <div class="callout-text"><strong>INSWA is the standout growth story</strong> — template downloads up +1400%, total downloads up +167%. Combined with AFR (+107%), these emerging regions are accelerating adoption even as established markets plateau.</div>
+            </div>
+
+            <div class="callout warn" style="margin-top:12px;">
+              <div class="callout-icon">▲</div>
+              <div class="callout-text"><strong>EU and NA are the biggest drags.</strong> EU total downloads −25%; NA total downloads −17%. Given NA is 47.6% of all downloads, even modest NA decline has outsized impact on the global total.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /sections-wrap -->
+
+  <footer>
+    <span>Coca-Cola DAM Analytics · Users &amp; Downloads Report · 2025 YTD (Jan–May)</span>
+    <a href="index.html">← Back to Search Insights</a>
+  </footer>
+
+<script>
+(function() {
+
+  // ─── HELPERS ──────────────────────────────────────────────────────────────
+  function fmt(n) {
+    return n.toLocaleString('en-US');
+  }
+  function pct(val, total) {
+    return ((val / total) * 100).toFixed(1) + '%';
+  }
+  function getCtx(id) {
+    var c = document.getElementById(id);
+    if (!c) return null;
+    var dpr = window.devicePixelRatio || 1;
+    var w = c.width, h = c.height;
+    c.width = w * dpr;
+    c.height = h * dpr;
+    c.style.width = w + 'px';
+    c.style.height = h + 'px';
+    var ctx = c.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx._w = w;
+    ctx._h = h;
+    return ctx;
+  }
+
+  // ─── COLORS ───────────────────────────────────────────────────────────────
+  var C = {
+    bg:      '#0f1014',
+    surface: '#1a1c22',
+    surface2:'#22252e',
+    border:  '#2e3140',
+    text:    '#e8eaf0',
+    muted:   '#8b8fa8',
+    dim:     '#5a5e72',
+    red:     '#F40009',
+    redSoft: '#f87171',
+    green:   '#22c55e',
+    orange:  '#fb923c',
+    yellow:  '#fbbf24',
+    blue:    '#3b82f6',
+    purple:  '#a855f7',
+    teal:    '#14b8a6'
+  };
+
+  // ─── DATA ─────────────────────────────────────────────────────────────────
+
+  var geoData = [
+    { code:'AFR',   users:164,  logins:719,   dlrs:99,   assetDl:1463,  tmplDl:64,   totalDl:1527 },
+    { code:'ASP',   users:289,  logins:1376,  dlrs:159,  assetDl:1301,  tmplDl:79,   totalDl:1380 },
+    { code:'EME',   users:106,  logins:324,   dlrs:60,   assetDl:215,   tmplDl:45,   totalDl:260  },
+    { code:'EU',    users:633,  logins:3008,  dlrs:336,  assetDl:3632,  tmplDl:142,  totalDl:3774 },
+    { code:'GCM',   users:52,   logins:249,   dlrs:29,   assetDl:295,   tmplDl:7,    totalDl:302  },
+    { code:'INSWA', users:85,   logins:530,   dlrs:37,   assetDl:612,   tmplDl:33,   totalDl:645  },
+    { code:'JSK',   users:515,  logins:3161,  dlrs:301,  assetDl:5490,  tmplDl:206,  totalDl:5696 },
+    { code:'LA',    users:542,  logins:1834,  dlrs:284,  assetDl:2115,  tmplDl:198,  totalDl:2313 },
+    { code:'NA',    users:2591, logins:43923, dlrs:1292, assetDl:12615, tmplDl:1845, totalDl:14460}
+  ];
+
+  var campaigns = [
+    { rank:1,  name:'None (untagged)',                        brand:'Coca-Cola Zero', ous:81, dlrs:1412, total:10287 },
+    { rank:2,  name:'FIFA World Cup 2026',                    brand:'Coca-Cola',      ous:74, dlrs:502,  total:4924  },
+    { rank:3,  name:'Unknown',                                brand:'Coca-Cola',      ous:67, dlrs:1060, total:3687  },
+    { rank:4,  name:'America 250 — NA — 2026',                brand:'Coca-Cola',      ous:9,  dlrs:218,  total:1711  },
+    { rank:5,  name:"Sprite — It's That Fresh — Summer 2026", brand:'Sprite',         ous:54, dlrs:150,  total:865   },
+    { rank:6,  name:'Coca-Cola Sustaining',                   brand:'Coca-Cola Zero', ous:56, dlrs:260,  total:737   },
+    { rank:7,  name:'Coca-Cola — Ice Cold — 2026',            brand:'Coca-Cola',      ous:31, dlrs:61,   total:543   },
+    { rank:8,  name:'Fanta — Wanta Fanta — Gaming 2026',      brand:'Fanta',          ous:32, dlrs:101,  total:539   },
+    { rank:9,  name:'Powerade — FIFA — 2026',                 brand:'Powerade',       ous:31, dlrs:85,   total:325   },
+    { rank:10, name:'Coca-Cola — Always On Soccer — NA 2026', brand:'Coca-Cola',      ous:24, dlrs:125,  total:301   }
+  ];
+
+  var yoyData = [
+    { code:'AFR',   dlrPct:52,   assetPct:116, tmplPct:-8,    totalPct:107  },
+    { code:'ASP',   dlrPct:7,    assetPct:12,  tmplPct:-36,   totalPct:6    },
+    { code:'EME',   dlrPct:-37,  assetPct:12,  tmplPct:-78,   totalPct:-6   },
+    { code:'EU',    dlrPct:-14,  assetPct:-28, tmplPct:11,    totalPct:-25  },
+    { code:'GCM',   dlrPct:91,   assetPct:-18, tmplPct:100,   totalPct:-16  },
+    { code:'INSWA', dlrPct:32,   assetPct:150, tmplPct:1400,  totalPct:167  },
+    { code:'JSK',   dlrPct:4,    assetPct:4,   tmplPct:-32,   totalPct:1    },
+    { code:'LA',    dlrPct:-6,   assetPct:-2,  tmplPct:-23,   totalPct:-5   },
+    { code:'NA',    dlrPct:2,    assetPct:-18, tmplPct:-4,    totalPct:-17  }
+  ];
+
+  var roleUsers    = [2623, 958, 1631, 66];
+  var roleLogins   = [10878, 6957, 9028, 773];
+  var roleDlrs     = [1369, 577, 771];
+  var roleDls      = [9694, 9380, 12203];
+  var roleNames    = ['Associate','Agency','Bottler','Other'];
+  var roleNamesDl  = ['Associate','Agency','Bottler'];
+
+  // ─── SECTION 1: FUNNEL ────────────────────────────────────────────────────
+  (function drawFunnel() {
+    var ctx = getCtx('funnelCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    var steps = [
+      { label:'Unique Users',       val:5117, pctLabel:'100%',  color:C.red     },
+      { label:'Unique Searchers',   val:4479, pctLabel:'87.5%', color:C.orange  },
+      { label:'Unique Downloaders', val:2667, pctLabel:'52.1%', color:C.green   }
+    ];
+
+    var maxVal = 5117;
+    var maxW = W - 80;
+    var stepH = 80;
+    var gapH = 20;
+    var topY = 20;
+
+    // draw trapezoids
+    for (var i = 0; i < steps.length; i++) {
+      var s = steps[i];
+      var w = (s.val / maxVal) * maxW;
+      var prevW = i === 0 ? maxW : (steps[i-1].val / maxVal) * maxW;
+      var y = topY + i * (stepH + gapH);
+      var cx = W / 2;
+
+      ctx.beginPath();
+      ctx.moveTo(cx - prevW/2, y);
+      ctx.lineTo(cx + prevW/2, y);
+      ctx.lineTo(cx + w/2, y + stepH);
+      ctx.lineTo(cx - w/2, y + stepH);
+      ctx.closePath();
+
+      // gradient fill
+      var grad = ctx.createLinearGradient(0, y, 0, y + stepH);
+      grad.addColorStop(0, s.color + 'cc');
+      grad.addColorStop(1, s.color + '55');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.strokeStyle = s.color;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // label inside
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 15px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(fmt(s.val), cx, y + stepH/2 - 8);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.fillText(s.pctLabel + ' of users', cx, y + stepH/2 + 10);
+
+      // side label
+      ctx.fillStyle = C.muted;
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(s.label, cx - prevW/2 - 6, y + stepH/2);
+
+      // drop arrow between steps
+      if (i < steps.length - 1) {
+        var drop = s.val - steps[i+1].val;
+        var arrowY = y + stepH + gapH/2;
+        ctx.fillStyle = C.dim;
+        ctx.font = '11px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('−' + fmt(drop), cx, arrowY);
+      }
+    }
+  })();
+
+  // ─── SECTION 2: LOGIN INTENSITY ───────────────────────────────────────────
+  (function drawLoginIntensity() {
+    var ctx = getCtx('loginIntensityCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    // sort by intensity desc
+    var data = geoData.map(function(d) {
+      return { code:d.code, intensity: d.logins/d.users };
+    }).sort(function(a,b) { return b.intensity - a.intensity; });
+
+    var padL = 64, padR = 20, padT = 12, padB = 20;
+    var chartW = W - padL - padR;
+    var rowH = (H - padT - padB) / data.length;
+    var maxVal = data[0].intensity; // NA at top
+    // cap visual display at 20 to not make everything tiny
+    var displayMax = 20;
+
+    // grid lines
+    var gridVals = [0,5,10,15,20];
+    ctx.strokeStyle = C.border;
+    ctx.lineWidth = 1;
+    gridVals.forEach(function(v) {
+      var x = padL + (v / displayMax) * chartW;
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, H - padB);
+      ctx.stroke();
+      ctx.fillStyle = C.dim;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(v + 'x', x, H - padB + 4);
+    });
+
+    data.forEach(function(d, i) {
+      var y = padT + i * rowH;
+      var barH = rowH * 0.55;
+      var barY = y + (rowH - barH) / 2;
+      var isNA = d.code === 'NA';
+      var color = isNA ? C.red : (d.intensity >= 5.5 ? C.teal : C.blue);
+
+      // bar (capped at displayMax for visual, but annotated)
+      var dispW = Math.min(d.intensity, displayMax) / displayMax * chartW;
+      var grad = ctx.createLinearGradient(padL, 0, padL + dispW, 0);
+      grad.addColorStop(0, color);
+      grad.addColorStop(1, color + '88');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(padL, barY, dispW, barH, 3);
+      ctx.fill();
+
+      // region label
+      ctx.fillStyle = C.muted;
+      ctx.font = '12px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(d.code, padL - 8, barY + barH/2);
+
+      // value label
+      ctx.fillStyle = isNA ? C.redSoft : C.text;
+      ctx.font = isNA ? 'bold 12px system-ui, sans-serif' : '12px system-ui, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(d.intensity.toFixed(1) + '×', padL + dispW + 6, barY + barH/2);
+
+      // NA overflow arrow
+      if (isNA) {
+        ctx.fillStyle = C.redSoft;
+        ctx.font = 'bold 10px system-ui, sans-serif';
+        ctx.fillText('← OUTLIER (16.9×)', padL + dispW + 40, barY + barH/2);
+      }
+    });
+
+    // axis label
+    ctx.fillStyle = C.dim;
+    ctx.font = '10px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Logins per User', padL + chartW/2, H - 4);
+  })();
+
+  // build table for section 2
+  (function buildLoginTable() {
+    var tbody = document.getElementById('loginIntensityTable');
+    if (!tbody) return;
+    var sorted = geoData.slice().sort(function(a,b) {
+      return (b.logins/b.users) - (a.logins/a.users);
+    });
+    sorted.forEach(function(d) {
+      var intensity = (d.logins / d.users).toFixed(1);
+      var isNA = d.code === 'NA';
+      var isHigh = parseFloat(intensity) >= 5.5;
+      var colorClass = isNA ? 'red-text' : (isHigh ? '' : 'muted');
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="bold">' + d.code + '</td>' +
+        '<td class="num-right">' + fmt(d.users) + '</td>' +
+        '<td class="num-right">' + fmt(d.logins) + '</td>' +
+        '<td class="num-right ' + colorClass + '">' + intensity + '×</td>';
+      tbody.appendChild(tr);
+    });
+    // total row
+    var totalUsers = geoData.reduce(function(s,d){ return s+d.users; },0);
+    var totalLogins = geoData.reduce(function(s,d){ return s+d.logins; },0);
+    var tr = document.createElement('tr');
+    tr.style.borderTop = '2px solid var(--border)';
+    tr.innerHTML =
+      '<td class="bold dim">Total</td>' +
+      '<td class="num-right bold">' + fmt(totalUsers) + '</td>' +
+      '<td class="num-right bold">' + fmt(totalLogins) + '</td>' +
+      '<td class="num-right bold muted">' + (totalLogins/totalUsers).toFixed(1) + '×</td>';
+    tbody.appendChild(tr);
+  })();
+
+  // ─── SECTION 3: ONBOARDING STACKED BAR ────────────────────────────────────
+  (function drawOnboarding() {
+    var ctx = getCtx('onboardingCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    var months = [
+      { label:'Mar', total:2335, newU:2333, ret:2 },
+      { label:'Apr', total:3752, newU:2203, ret:1549 },
+      { label:'May', total:2230, newU:579,  ret:1651 }
+    ];
+    var pctNew = [100, 59, 26];
+
+    var padL = 36, padR = 50, padT = 20, padB = 40;
+    var chartW = W - padL - padR;
+    var chartH = H - padT - padB;
+    var maxVal = 4000;
+    var barW = chartW / months.length * 0.55;
+    var barSpacing = chartW / months.length;
+
+    // Y grid
+    [0,1000,2000,3000,4000].forEach(function(v) {
+      var y = padT + chartH - (v / maxVal) * chartH;
+      ctx.strokeStyle = C.border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(W - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = C.dim;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText((v/1000) + 'k', padL - 4, y);
+    });
+
+    // draw bars
+    months.forEach(function(m, i) {
+      var x = padL + i * barSpacing + (barSpacing - barW) / 2;
+      var totalH = (m.total / maxVal) * chartH;
+      var newH = (m.newU / maxVal) * chartH;
+      var retH = (m.ret / maxVal) * chartH;
+      var baseY = padT + chartH;
+
+      // returning (blue, bottom)
+      ctx.fillStyle = C.blue + 'cc';
+      ctx.beginPath();
+      ctx.roundRect(x, baseY - retH, barW, retH, [0,0,3,3]);
+      ctx.fill();
+
+      // new (red, top)
+      ctx.fillStyle = C.red + 'cc';
+      ctx.beginPath();
+      ctx.roundRect(x, baseY - totalH, barW, newH, [3,3,0,0]);
+      ctx.fill();
+
+      // month label
+      ctx.fillStyle = C.muted;
+      ctx.font = '12px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(m.label, x + barW/2, baseY + 6);
+
+      // total label
+      ctx.fillStyle = C.text;
+      ctx.font = 'bold 11px system-ui, sans-serif';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(fmt(m.total), x + barW/2, baseY - totalH - 4);
+    });
+
+    // % new line
+    ctx.beginPath();
+    ctx.strokeStyle = C.yellow;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 3]);
+    months.forEach(function(m, i) {
+      var x = padL + i * barSpacing + barSpacing / 2;
+      // map pct to right axis
+      var y = padT + chartH - (pctNew[i] / 100) * chartH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // dots + labels on line
+    months.forEach(function(m, i) {
+      var x = padL + i * barSpacing + barSpacing / 2;
+      var y = padT + chartH - (pctNew[i] / 100) * chartH;
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI*2);
+      ctx.fillStyle = C.yellow;
+      ctx.fill();
+
+      ctx.fillStyle = C.yellow;
+      ctx.font = 'bold 11px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(pctNew[i] + '%', x, y - 6);
+    });
+
+    // right axis label
+    ctx.fillStyle = C.yellow;
+    ctx.font = '10px system-ui, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText('% new →', W - 2, padT);
+  })();
+
+  // login events mini bar
+  (function drawLoginEvents() {
+    var ctx = getCtx('loginEventsCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    var months = ['Jan','Feb','Mar','Apr','May'];
+    var vals = [0, 9, 7240, 34567, 14077];
+
+    var padL = 40, padR = 12, padT = 12, padB = 24;
+    var chartW = W - padL - padR;
+    var chartH = H - padT - padB;
+    var maxVal = 36000;
+    var barW = chartW / months.length * 0.6;
+    var barSpacing = chartW / months.length;
+
+    // grid
+    [0, 10000, 20000, 30000].forEach(function(v) {
+      var y = padT + chartH - (v / maxVal) * chartH;
+      ctx.strokeStyle = C.border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(W - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = C.dim;
+      ctx.font = '9px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(v === 0 ? '0' : (v/1000) + 'k', padL - 4, y);
+    });
+
+    vals.forEach(function(v, i) {
+      if (v === 0) {
+        // still show month label
+        var x = padL + i * barSpacing + (barSpacing - barW) / 2;
+        ctx.fillStyle = C.dim;
+        ctx.font = '10px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(months[i], x + barW/2, padT + chartH + 4);
+        return;
+      }
+      var x = padL + i * barSpacing + (barSpacing - barW) / 2;
+      var bH = (v / maxVal) * chartH;
+      var baseY = padT + chartH;
+
+      var grad = ctx.createLinearGradient(0, baseY - bH, 0, baseY);
+      grad.addColorStop(0, C.purple);
+      grad.addColorStop(1, C.purple + '55');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(x, baseY - bH, barW, bH, [3,3,0,0]);
+      ctx.fill();
+
+      ctx.fillStyle = C.muted;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(months[i], x + barW/2, baseY + 4);
+
+      ctx.fillStyle = C.text;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textBaseline = 'bottom';
+      if (v > 999) {
+        ctx.fillText((v/1000).toFixed(1) + 'k', x + barW/2, baseY - bH - 2);
+      } else {
+        ctx.fillText(v, x + barW/2, baseY - bH - 2);
+      }
+    });
+  })();
+
+  // ─── SECTION 4: ROLE CHARTS ────────────────────────────────────────────────
+
+  // Downloads per person horizontal bar
+  (function drawRoleDlPerPerson() {
+    var ctx = getCtx('roleDlPerPersonCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    var data = [
+      { role:'Associate', val:7.1,  color:C.orange },
+      { role:'Agency',    val:16.3, color:C.green  },
+      { role:'Bottler',   val:15.8, color:C.teal   }
+    ];
+
+    var padL = 84, padR = 60, padT = 16, padB = 24;
+    var chartW = W - padL - padR;
+    var chartH = H - padT - padB;
+    var rowH = chartH / data.length;
+    var barH = rowH * 0.48;
+    var maxVal = 18;
+
+    // grid
+    [0,5,10,15].forEach(function(v) {
+      var x = padL + (v / maxVal) * chartW;
+      ctx.strokeStyle = C.border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, padT + chartH);
+      ctx.stroke();
+      ctx.fillStyle = C.dim;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(v + '×', x, padT + chartH + 12);
+    });
+
+    data.forEach(function(d, i) {
+      var y = padT + i * rowH + (rowH - barH) / 2;
+      var bW = (d.val / maxVal) * chartW;
+
+      var grad = ctx.createLinearGradient(padL, 0, padL + bW, 0);
+      grad.addColorStop(0, d.color);
+      grad.addColorStop(1, d.color + '77');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(padL, y, bW, barH, 3);
+      ctx.fill();
+
+      // role label
+      ctx.fillStyle = C.muted;
+      ctx.font = '12px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(d.role, padL - 8, y + barH/2);
+
+      // value
+      ctx.fillStyle = d.color;
+      ctx.font = 'bold 13px system-ui, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(d.val + '×', padL + bW + 8, y + barH/2);
+    });
+
+    ctx.fillStyle = C.dim;
+    ctx.font = '10px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Downloads per Downloader', padL + chartW/2, padT + chartH + 22);
+  })();
+
+  // Share of downloaders vs share of downloads
+  (function drawRoleShare() {
+    var ctx = getCtx('roleShareCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    var totalDlrs = roleDlrs.reduce(function(s,v){return s+v;},0);
+    var totalDls  = roleDls.reduce(function(s,v){return s+v;},0);
+
+    var data = roleNamesDl.map(function(name, i) {
+      return {
+        role: name,
+        dlrPct: roleDlrs[i] / totalDlrs * 100,
+        dlPct:  roleDls[i]  / totalDls  * 100
+      };
+    });
+
+    var padL = 84, padR = 20, padT = 16, padB = 24;
+    var chartW = W - padL - padR;
+    var chartH = H - padT - padB;
+    var groupW = chartW / data.length;
+    var barW = groupW * 0.3;
+    var gap = groupW * 0.06;
+
+    [0,10,20,30,40,50].forEach(function(v) {
+      var y = padT + chartH - (v/100) * chartH;
+      ctx.strokeStyle = C.border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(W - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = C.dim;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(v + '%', padL - 4, y);
+    });
+
+    data.forEach(function(d, i) {
+      var cx = padL + i * groupW + groupW / 2;
+
+      // dlrs bar (blue)
+      var bH1 = (d.dlrPct / 100) * chartH;
+      var x1 = cx - barW - gap/2;
+      ctx.fillStyle = C.blue + 'cc';
+      ctx.beginPath();
+      ctx.roundRect(x1, padT + chartH - bH1, barW, bH1, [3,3,0,0]);
+      ctx.fill();
+      ctx.fillStyle = C.blue;
+      ctx.font = 'bold 10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(d.dlrPct.toFixed(1) + '%', x1 + barW/2, padT + chartH - bH1 - 3);
+
+      // dls bar (red)
+      var bH2 = (d.dlPct / 100) * chartH;
+      var x2 = cx + gap/2;
+      ctx.fillStyle = C.red + 'cc';
+      ctx.beginPath();
+      ctx.roundRect(x2, padT + chartH - bH2, barW, bH2, [3,3,0,0]);
+      ctx.fill();
+      ctx.fillStyle = C.redSoft;
+      ctx.font = 'bold 10px system-ui, sans-serif';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(d.dlPct.toFixed(1) + '%', x2 + barW/2, padT + chartH - bH2 - 3);
+
+      // role label
+      ctx.fillStyle = C.muted;
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.textBaseline = 'top';
+      ctx.fillText(d.role, cx, padT + chartH + 6);
+    });
+  })();
+
+  // Users vs Downloaders by role
+  (function drawRoleUsersDl() {
+    var ctx = getCtx('roleUsersDlCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    var names   = ['Associate','Agency','Bottler'];
+    var usersV  = [2623, 958, 1631];
+    var dlrsV   = [1369, 577, 771];
+
+    var padL = 60, padR = 20, padT = 16, padB = 24;
+    var chartW = W - padL - padR;
+    var chartH = H - padT - padB;
+    var groupW = chartW / names.length;
+    var barW = groupW * 0.3;
+    var gap = groupW * 0.06;
+    var maxVal = 3000;
+
+    [0,1000,2000,3000].forEach(function(v) {
+      var y = padT + chartH - (v/maxVal)*chartH;
+      ctx.strokeStyle = C.border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(W-padR, y);
+      ctx.stroke();
+      ctx.fillStyle = C.dim;
+      ctx.font = '9px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(v === 0 ? '0' : (v/1000)+'k', padL-4, y);
+    });
+
+    names.forEach(function(name, i) {
+      var cx = padL + i * groupW + groupW / 2;
+
+      // users bar
+      var bH1 = (usersV[i] / maxVal) * chartH;
+      var x1 = cx - barW - gap/2;
+      ctx.fillStyle = C.muted + '77';
+      ctx.beginPath();
+      ctx.roundRect(x1, padT+chartH-bH1, barW, bH1, [3,3,0,0]);
+      ctx.fill();
+      ctx.fillStyle = C.muted;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(fmt(usersV[i]), x1+barW/2, padT+chartH-bH1-3);
+
+      // downloaders bar
+      var bH2 = (dlrsV[i] / maxVal) * chartH;
+      var x2 = cx + gap/2;
+      ctx.fillStyle = C.green + 'aa';
+      ctx.beginPath();
+      ctx.roundRect(x2, padT+chartH-bH2, barW, bH2, [3,3,0,0]);
+      ctx.fill();
+      ctx.fillStyle = C.green;
+      ctx.font = 'bold 10px system-ui, sans-serif';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(fmt(dlrsV[i]), x2+barW/2, padT+chartH-bH2-3);
+
+      ctx.fillStyle = C.muted;
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.textBaseline = 'top';
+      ctx.fillText(name, cx, padT+chartH+5);
+    });
+  })();
+
+  // ─── SECTION 5: CAMPAIGNS ─────────────────────────────────────────────────
+  (function drawCampaigns() {
+    var ctx = getCtx('campaignCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    var brandColors = {
+      'Coca-Cola Zero': C.dim,
+      'Coca-Cola':      C.red,
+      'Sprite':         C.green,
+      'Fanta':          C.orange,
+      'Powerade':       C.blue
+    };
+
+    var unattributed = ['None (untagged)', 'Unknown'];
+
+    var padL = 260, padR = 80, padT = 16, padB = 16;
+    var chartW = W - padL - padR;
+    var chartH = H - padT - padB;
+    var rowH = chartH / campaigns.length;
+    var barH = rowH * 0.52;
+    var maxVal = 12000;
+
+    // grid
+    [0,2000,4000,6000,8000,10000,12000].forEach(function(v) {
+      var x = padL + (v / maxVal) * chartW;
+      ctx.strokeStyle = C.border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, padT + chartH);
+      ctx.stroke();
+      ctx.fillStyle = C.dim;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(v === 0 ? '' : (v/1000) + 'k', x, padT - 2);
+    });
+
+    campaigns.forEach(function(c, i) {
+      var y = padT + i * rowH + (rowH - barH) / 2;
+      var isUnattr = unattributed.indexOf(c.name) !== -1;
+      var color = isUnattr ? '#5a5e72' : (brandColors[c.brand] || C.blue);
+      var bW = (c.total / maxVal) * chartW;
+
+      // bar
+      var grad = ctx.createLinearGradient(padL, 0, padL + bW, 0);
+      grad.addColorStop(0, color + 'ee');
+      grad.addColorStop(1, color + '55');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(padL, y, bW, barH, 3);
+      ctx.fill();
+
+      // campaign name
+      ctx.fillStyle = isUnattr ? C.dim : C.muted;
+      ctx.font = (isUnattr ? 'italic ' : '') + '11px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      // truncate long names
+      var label = c.name.length > 32 ? c.name.substring(0, 30) + '…' : c.name;
+      ctx.fillText(label, padL - 8, y + barH/2);
+
+      // rank
+      ctx.fillStyle = isUnattr ? C.dim : C.dim;
+      ctx.font = 'bold 10px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('#' + c.rank, 18, y + barH/2);
+
+      // downloads value
+      ctx.fillStyle = isUnattr ? C.dim : C.text;
+      ctx.font = isUnattr ? '11px system-ui, sans-serif' : 'bold 11px system-ui, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(fmt(c.total), padL + bW + 6, y + barH/2);
+
+      // downloaders & OUs (small)
+      ctx.fillStyle = C.dim;
+      ctx.font = '9px system-ui, sans-serif';
+      ctx.fillText(fmt(c.dlrs) + ' dlrs · ' + c.ous + ' OUs', padL + bW + 6, y + barH/2 + 12);
+    });
+  })();
+
+  // campaign table
+  (function buildCampaignTable() {
+    var tbody = document.getElementById('campaignTable');
+    if (!tbody) return;
+    var unattr = ['None (untagged)', 'Unknown'];
+    campaigns.forEach(function(c) {
+      var isUnattr = unattr.indexOf(c.name) !== -1;
+      var tr = document.createElement('tr');
+      var nameCell = isUnattr
+        ? '<td style="color:var(--dim);font-style:italic;">' + c.name + '</td>'
+        : '<td>' + c.name + '</td>';
+      var dlClass = isUnattr ? 'dim' : 'bold';
+      tr.innerHTML =
+        '<td><span class="rank-badge' + (c.rank <= 3 && !isUnattr ? ' top' : '') + '">' + c.rank + '</span></td>' +
+        nameCell +
+        '<td class="muted">' + c.brand + '</td>' +
+        '<td class="num-right muted">' + c.ous + '</td>' +
+        '<td class="num-right">' + fmt(c.dlrs) + '</td>' +
+        '<td class="num-right ' + dlClass + '">' + fmt(c.total) + '</td>';
+      tbody.appendChild(tr);
+    });
+  })();
+
+  // ─── SECTION 6: YoY DIVERGING BAR ─────────────────────────────────────────
+  (function drawYoY() {
+    var ctx = getCtx('yoyCanvas');
+    if (!ctx) return;
+    var W = ctx._w, H = ctx._h;
+
+    // sort by totalPct desc
+    var data = yoyData.slice().sort(function(a,b) { return b.totalPct - a.totalPct; });
+
+    var padL = 64, padR = 32, padT = 16, padB = 20;
+    var chartW = W - padL - padR;
+    var chartH = H - padT - padB;
+    var rowH = chartH / data.length;
+    var barH = rowH * 0.50;
+
+    // range: -30 to +180 (INSWA is 167)
+    var minVal = -30, maxVal = 180;
+    var range = maxVal - minVal;
+    var zeroX = padL + ((-minVal) / range) * chartW;
+
+    // grid lines
+    [-20, -10, 0, 25, 50, 100, 150].forEach(function(v) {
+      var x = padL + ((v - minVal) / range) * chartW;
+      ctx.strokeStyle = v === 0 ? C.muted : C.border;
+      ctx.lineWidth = v === 0 ? 1.5 : 1;
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, padT + chartH);
+      ctx.stroke();
+      ctx.fillStyle = v === 0 ? C.muted : C.dim;
+      ctx.font = '9px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      if (v !== 0) ctx.fillText(v + '%', x, padT - 2);
+    });
+
+    // zero line label
+    ctx.fillStyle = C.muted;
+    ctx.font = '9px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('0', zeroX, padT - 2);
+
+    // reference line: overall -11%
+    var refX = padL + ((-11 - minVal) / range) * chartW;
+    ctx.strokeStyle = C.yellow + '88';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    ctx.moveTo(refX, padT);
+    ctx.lineTo(refX, padT + chartH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = C.yellow;
+    ctx.font = 'bold 9px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('−11%', refX, padT - 2);
+
+    data.forEach(function(d, i) {
+      var y = padT + i * rowH + (rowH - barH) / 2;
+      var val = d.totalPct;
+      // cap INSWA at 167 visually — will overflow canvas otherwise, use maxVal=180
+      var dispVal = Math.max(minVal, Math.min(maxVal, val));
+      var x1, bW;
+      if (dispVal >= 0) {
+        x1 = zeroX;
+        bW = (dispVal / range) * chartW;
+      } else {
+        bW = ((-dispVal) / range) * chartW;
+        x1 = zeroX - bW;
+      }
+
+      var color = val >= 0 ? C.green : C.redSoft;
+      var grad = ctx.createLinearGradient(x1, 0, x1 + (val >= 0 ? bW : -bW) * (val >= 0 ? 1 : -1), 0);
+      // For negative, gradient goes from zero toward left
+      if (val >= 0) {
+        grad = ctx.createLinearGradient(x1, 0, x1+bW, 0);
+        grad.addColorStop(0, color + 'bb');
+        grad.addColorStop(1, color + '44');
+      } else {
+        grad = ctx.createLinearGradient(x1+bW, 0, x1, 0);
+        grad.addColorStop(0, color + 'bb');
+        grad.addColorStop(1, color + '44');
+      }
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(x1, y, bW, barH, 3);
+      ctx.fill();
+
+      // region label
+      ctx.fillStyle = C.muted;
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(d.code, padL - 6, y + barH/2);
+
+      // value label
+      ctx.fillStyle = color;
+      ctx.font = 'bold 11px system-ui, sans-serif';
+      ctx.textAlign = val >= 0 ? 'left' : 'right';
+      var labelX = val >= 0 ? x1 + bW + 5 : x1 - 5;
+      // special for INSWA overflow
+      if (d.code === 'INSWA') {
+        ctx.fillStyle = C.green;
+        ctx.textAlign = 'left';
+        ctx.fillText('+' + val + '%', padL + chartW - 42, y + barH/2);
+      } else {
+        ctx.fillText((val >= 0 ? '+' : '') + val + '%', labelX, y + barH/2);
+      }
+    });
+  })();
+
+  // YoY table
+  (function buildYoYTable() {
+    var tbody = document.getElementById('yoyTable');
+    if (!tbody) return;
+    yoyData.forEach(function(d) {
+      function fmt_pct(v) {
+        var cls = v > 0 ? 'green-text' : (v < 0 ? 'red-text' : 'muted');
+        var sign = v > 0 ? '+' : '';
+        return '<td class="num-right ' + cls + '">' + sign + v + '%</td>';
+      }
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="bold">' + d.code + '</td>' +
+        fmt_pct(d.dlrPct) +
+        fmt_pct(d.assetPct) +
+        fmt_pct(d.tmplPct) +
+        fmt_pct(d.totalPct);
+      tbody.appendChild(tr);
+    });
+    // total row
+    var tr = document.createElement('tr');
+    tr.style.borderTop = '2px solid var(--border)';
+    tr.innerHTML =
+      '<td class="bold dim">Total</td>' +
+      '<td class="num-right muted">0%</td>' +
+      '<td class="num-right red-text">−11%</td>' +
+      '<td class="num-right red-text">−10%</td>' +
+      '<td class="num-right red-text">−11%</td>';
+    tbody.appendChild(tr);
+  })();
+
+})();
+</script>
+</body>
+</html>
