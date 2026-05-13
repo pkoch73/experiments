@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coca-Cola DAM · Platform Intelligence Report · 2025 YTD</title>
+<style>
+  :root {
+    --bg: #0f1014;
+    --surface: #1a1c22;
+    --surface2: #22252e;
+    --border: #2e3140;
+    --text: #e8eaf0;
+    --text-muted: #8b8fa8;
+    --text-dim: #5a5e72;
+    --red: #F40009;
+    --green: #22c55e;
+    --orange: #fb923c;
+    --yellow: #fbbf24;
+    --blue: #3b82f6;
+    --purple: #a855f7;
+    --teal: #14b8a6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15,16,20,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 52px;
+    gap: 28px;
+  }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--red);
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* LAYOUT */
+  .page { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  /* HERO */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .hero-title {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+
+  /* KPI STRIP */
+  .kpi-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 56px;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    flex: 1 1 140px;
+    min-width: 140px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .kpi-value.red { color: var(--red); }
+  .kpi-value.orange { color: var(--orange); }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 72px;
+    scroll-margin-top: 64px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .section-badge {
+    width: 30px;
+    height: 30px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+  }
+  .section-insight {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+    margin-left: 44px;
+    max-width: 760px;
+    line-height: 1.6;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+
+  /* OVERVIEW SUMMARY CARDS */
+  .overview-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 700px) {
+    .overview-cards { grid-template-columns: 1fr; }
+  }
+  .ov-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .ov-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .ov-card-stat {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .ov-card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .ov-card.accent-red { border-color: rgba(244,0,9,0.3); }
+  .ov-card.accent-orange { border-color: rgba(251,146,60,0.3); }
+  .ov-card.accent-yellow { border-color: rgba(251,191,36,0.3); }
+  .ov-card.accent-blue { border-color: rgba(59,130,246,0.3); }
+
+  /* FUNNEL CALLOUTS */
+  .funnel-callouts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  @media (max-width: 600px) {
+    .funnel-callouts { grid-template-columns: 1fr; }
+  }
+  .funnel-callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .funnel-callout strong { color: var(--text); }
+
+  /* TABLES */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 10px 14px;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr {
+    border-bottom: 1px solid rgba(46,49,64,0.5);
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody td {
+    padding: 9px 14px;
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .rank-cell {
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    width: 32px;
+  }
+  .term-cell {
+    font-family: 'SF Mono', 'Consolas', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .num-cell {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .bar-cell { width: 120px; }
+
+  /* FAILURE BAR */
+  .fail-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .fail-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: rgba(46,49,64,0.8);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .fail-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+  .fail-pct {
+    font-size: 12px;
+    font-weight: 700;
+    width: 38px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* YoY BADGE */
+  .yoy-pos { color: var(--green); font-weight: 700; }
+  .yoy-neg { color: var(--red); font-weight: 700; }
+
+  /* ROLE CARDS */
+  .role-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 900px) {
+    .role-cards { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 500px) {
+    .role-cards { grid-template-columns: 1fr; }
+  }
+  .role-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .role-card-name {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .role-card-users {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .role-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(46,49,64,0.5);
+  }
+  .role-stat-row:last-of-type { border-bottom: none; }
+  .role-stat-label { font-size: 11px; color: var(--text-dim); }
+  .role-stat-val { font-size: 14px; font-weight: 700; }
+  .role-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-power { background: rgba(168,85,247,0.2); color: var(--purple); }
+  .badge-high  { background: rgba(34,197,94,0.15); color: var(--green); }
+  .badge-std   { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .badge-other { background: rgba(251,191,36,0.15); color: var(--yellow); }
+
+  /* CAMPAIGN TABLE */
+  .campaign-lower {
+    margin-top: 24px;
+  }
+
+  /* ATTRIBUTION CALLOUT */
+  .attribution-callout {
+    background: rgba(244,0,9,0.06);
+    border: 1px solid rgba(244,0,9,0.2);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .attribution-callout strong { color: var(--text); }
+
+  /* CANVAS WRAPPERS */
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  canvas { display: block; }
+
+  /* SPLIT LAYOUT */
+  .split {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 800px) {
+    .split { grid-template-columns: 1fr; }
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    margin-top: 80px;
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .footer-links {
+    display: flex;
+    gap: 16px;
+  }
+  .footer-links a {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+  .footer-links a:hover { color: var(--text-muted); }
+
+  /* TREND CALLOUT ROW */
+  .trend-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  @media (max-width: 700px) {
+    .trend-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">C DAM</div>
+  <div class="nav-links">
+    <a href="#hero">Overview</a>
+    <a href="#s2">Funnel</a>
+    <a href="#s3">Content Gaps</a>
+    <a href="#s4">Regions</a>
+    <a href="#s5">Roles</a>
+    <a href="#s6">Campaigns</a>
+    <a href="#s7">Trends</a>
+  </div>
+  <div class="nav-meta">2025 YTD · Jan–May</div>
+</nav>
+
+<!-- HERO -->
+<div class="page">
+  <section class="hero" id="hero">
+    <div class="hero-label">Coca-Cola DAM</div>
+    <h1 class="hero-title">Platform Intelligence<br>Report</h1>
+    <p class="hero-sub">Unified analysis across search, users, and downloads &nbsp;·&nbsp; Jan–May 2025</p>
+  </section>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-label">Unique Users</div>
+      <div class="kpi-value">5,117</div>
+      <div class="kpi-sub">registered accounts active</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Logins</div>
+      <div class="kpi-value">55,124</div>
+      <div class="kpi-sub">login events YTD</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Unique Searchers</div>
+      <div class="kpi-value">4,479</div>
+      <div class="kpi-sub">87.5% of all users</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Searches</div>
+      <div class="kpi-value">237,528</div>
+      <div class="kpi-sub">search events YTD</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Unique Downloaders</div>
+      <div class="kpi-value">2,667</div>
+      <div class="kpi-sub">52.1% of all users</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Downloads</div>
+      <div class="kpi-value">30,357</div>
+      <div class="kpi-sub">assets + templates</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Zero-Result Rate</div>
+      <div class="kpi-value red">78.9%</div>
+      <div class="kpi-sub">187,379 of 237,528</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Download Conversion</div>
+      <div class="kpi-value orange">52.1%</div>
+      <div class="kpi-sub">of users who download</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: Platform Overview -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-badge">1</div>
+      <h2 class="section-title">Platform Overview</h2>
+    </div>
+    <p class="section-insight">A high-level synthesis across all three reports reveals four systemic patterns shaping platform health.</p>
+
+    <div class="overview-cards">
+      <div class="ov-card accent-orange">
+        <div class="ov-card-title">Search-to-Download Gap</div>
+        <div class="ov-card-stat" style="color:var(--orange)">35.4% gap</div>
+        <div class="ov-card-desc">87.5% of users search, only 52.1% download. 35.4% of users search but never find content worth downloading.</div>
+      </div>
+      <div class="ov-card accent-red">
+        <div class="ov-card-title">Content Failure Rate</div>
+        <div class="ov-card-stat" style="color:var(--red)">78.9% zero-result</div>
+        <div class="ov-card-desc">78.9% of 237K searches return zero results. Top search terms — FIFA, Fanta, America 250 — are systematically unresolved.</div>
+      </div>
+      <div class="ov-card accent-yellow">
+        <div class="ov-card-title">Unattributed Activity</div>
+        <div class="ov-card-stat" style="color:var(--yellow)">47.5% untagged</div>
+        <div class="ov-card-desc">47.5% of downloads carry no campaign tag. Content teams cannot measure ROI on nearly half of all asset activity.</div>
+      </div>
+      <div class="ov-card accent-blue">
+        <div class="ov-card-title">Agency Power Users</div>
+        <div class="ov-card-stat" style="color:var(--blue)">77 searches/user</div>
+        <div class="ov-card-desc">Agency role averages 68.8 searches/user AND 16.3 downloads/user — 2–3× all other roles. A critical underserved segment.</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Activity by Month — Search Events (÷1000), Downloads, Login Events (÷100)</div>
+      <canvas id="overviewMonthlyChart" style="width:100%;height:280px;"></canvas>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Engagement Funnel -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-badge">2</div>
+      <h2 class="section-title">The Engagement Funnel</h2>
+    </div>
+    <p class="section-insight">The platform loses users at two key stages. 12.5% of users never search. 47.9% of users never download. The 78.9% zero-result rate explains much of the drop-off.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Engagement Funnel — Users → Searchers → Downloaders</div>
+      <canvas id="funnelCanvas" style="width:100%;height:320px;"></canvas>
+    </div>
+
+    <div class="funnel-callouts">
+      <div class="funnel-callout">
+        <strong>2,450 users search but don't download</strong> — they're being failed by the 78.9% zero-result rate. Better metadata would directly recover downloads.
+      </div>
+      <div class="funnel-callout">
+        <strong>1,812 users who do search never download</strong> — likely finding results but not relevant ones. Content gaps, not just search failures, are at play.
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Content Gap Analysis -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-badge">3</div>
+      <h2 class="section-title">Content Gap Analysis</h2>
+    </div>
+    <p class="section-insight">Zero-result searches and untagged downloads point to the same root cause — metadata quality. The top search terms expose a systemic failure to tag and surface existing assets.</p>
+
+    <div class="split">
+      <div>
+        <div class="chart-wrap" style="padding:0; overflow:hidden;">
+          <div class="table-wrap" style="border:none; border-radius:0;">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Search Term</th>
+                  <th style="text-align:right">Searches</th>
+                  <th style="text-align:right">Zero-Result</th>
+                  <th>Failure %</th>
+                </tr>
+              </thead>
+              <tbody id="zr-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="chart-wrap">
+          <div class="chart-title">Result Size Distribution</div>
+          <canvas id="resultSizeDonut" style="width:100%;height:260px;"></canvas>
+        </div>
+        <div class="attribution-callout">
+          <strong>47.5% of downloads (13,974 of 30,357)</strong> tagged 'None' or 'unknown' — both the search failure and the download attribution gap stem from <strong>incomplete asset metadata</strong>.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: Regional Intelligence -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-badge">4</div>
+      <h2 class="section-title">Regional Intelligence</h2>
+    </div>
+    <p class="section-insight">NA dominates volume but regional behaviour varies dramatically. INSWA (+167% YoY) and AFR (+107% YoY) are fastest-growing. JSK shows the highest download intensity at 11.1 downloads/user.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Regional Comparison — Users (blue) · Searches÷100 (orange) · Downloads×2 (green)</div>
+      <canvas id="regionChart" style="width:100%;height:320px;"></canvas>
+    </div>
+
+    <div class="table-wrap" style="margin-top:16px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th style="text-align:right">Users</th>
+            <th style="text-align:right">Searches</th>
+            <th style="text-align:right">Downloads</th>
+            <th style="text-align:right">S/User</th>
+            <th style="text-align:right">D/User</th>
+            <th style="text-align:right">Logins/User</th>
+            <th style="text-align:right">YoY</th>
+          </tr>
+        </thead>
+        <tbody id="region-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 5: Role Behavior -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-badge">5</div>
+      <h2 class="section-title">Role-Based Behavior</h2>
+    </div>
+    <p class="section-insight">Each role has a distinct usage pattern. Agency users are platform power users across every dimension — highest searches, downloads, and logins per user.</p>
+
+    <div class="role-cards">
+      <div class="role-card">
+        <div class="role-card-name">Associate</div>
+        <div class="role-card-users">2,623 users</div>
+        <div class="role-stat-row"><span class="role-stat-label">Searches/User</span><span class="role-stat-val" style="color:var(--blue)">31.3</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Downloads/User</span><span class="role-stat-val" style="color:var(--green)">7.1</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Logins/User</span><span class="role-stat-val" style="color:var(--red)">4.1</span></div>
+        <span class="role-badge badge-std">Standard</span>
+      </div>
+      <div class="role-card" style="border-color:rgba(168,85,247,0.3)">
+        <div class="role-card-name" style="color:var(--purple)">Agency</div>
+        <div class="role-card-users">958 users</div>
+        <div class="role-stat-row"><span class="role-stat-label">Searches/User</span><span class="role-stat-val" style="color:var(--blue)">68.8</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Downloads/User</span><span class="role-stat-val" style="color:var(--green)">16.3</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Logins/User</span><span class="role-stat-val" style="color:var(--red)">7.3</span></div>
+        <span class="role-badge badge-power">Power User</span>
+      </div>
+      <div class="role-card" style="border-color:rgba(34,197,94,0.2)">
+        <div class="role-card-name" style="color:var(--green)">Bottler</div>
+        <div class="role-card-users">1,631 users</div>
+        <div class="role-stat-row"><span class="role-stat-label">Searches/User</span><span class="role-stat-val" style="color:var(--blue)">50.0</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Downloads/User</span><span class="role-stat-val" style="color:var(--green)">7.5</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Logins/User</span><span class="role-stat-val" style="color:var(--red)">5.5</span></div>
+        <span class="role-badge badge-high">High Value</span>
+      </div>
+      <div class="role-card">
+        <div class="role-card-name" style="color:var(--yellow)">Other</div>
+        <div class="role-card-users">66 users</div>
+        <div class="role-stat-row"><span class="role-stat-label">Searches/User</span><span class="role-stat-val" style="color:var(--blue)">106.3</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Downloads/User</span><span class="role-stat-val" style="color:var(--text-dim)">—</span></div>
+        <div class="role-stat-row"><span class="role-stat-label">Logins/User</span><span class="role-stat-val" style="color:var(--red)">11.7</span></div>
+        <span class="role-badge badge-other">Analyst?</span>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Role Intensity — Searches/User · Downloads/User · Logins/User (normalized to max)</div>
+      <canvas id="roleChart" style="width:100%;height:280px;"></canvas>
+    </div>
+  </section>
+
+  <!-- SECTION 6: Campaign Performance -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="section-badge">6</div>
+      <h2 class="section-title">Campaign Performance</h2>
+    </div>
+    <p class="section-insight">FIFA World Cup 2026 is the standout named campaign with 4,924 downloads across 74 OUs. But the #1 "campaign" is untagged Coca-Cola Zero — suggesting a large base of evergreen, unattributed content dominating downloads.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Top 10 Campaigns by Downloads</div>
+      <canvas id="campaignChart" style="width:100%;height:340px;"></canvas>
+    </div>
+
+    <div class="campaign-lower">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th style="text-align:right">Downloads</th>
+              <th style="text-align:right">Downloaders</th>
+              <th style="text-align:right">OUs Reached</th>
+              <th style="text-align:right">DL/Downloader</th>
+            </tr>
+          </thead>
+          <tbody id="campaign-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: Trends -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <div class="section-badge">7</div>
+      <h2 class="section-title">Monthly Trends</h2>
+    </div>
+    <p class="section-insight">April was peak month across all metrics, driven by FIFA WC 2026 campaign activity. May shows a natural post-campaign decline but platform activity is sustaining at healthy levels above March baseline.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Search Events by Type (stacked) + Active Users &amp; Downloaders (lines)</div>
+      <canvas id="trendChart" style="width:100%;height:320px;"></canvas>
+    </div>
+
+    <div class="trend-row">
+      <div class="chart-wrap">
+        <div class="chart-title">New vs Returning Users</div>
+        <canvas id="newReturnChart" style="width:100%;height:200px;"></canvas>
+      </div>
+      <div class="card" style="display:flex; flex-direction:column; justify-content:center; gap:14px;">
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-dim);margin-bottom:6px;">April Peak</div>
+          <div style="font-size:24px;font-weight:800;">111,875</div>
+          <div style="font-size:12px;color:var(--text-muted);">asset search events in April alone</div>
+        </div>
+        <div style="width:100%;height:1px;background:var(--border);"></div>
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-dim);margin-bottom:6px;">May Retention</div>
+          <div style="font-size:24px;font-weight:800;" style="color:var(--green)">25.9%</div>
+          <div style="font-size:12px;color:var(--text-muted);">returning users in May (1,651 of 2,230)</div>
+        </div>
+        <div style="width:100%;height:1px;background:var(--border);"></div>
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-dim);margin-bottom:6px;">Platform Velocity</div>
+          <div style="font-size:24px;font-weight:800;" style="color:var(--orange)">−41%</div>
+          <div style="font-size:12px;color:var(--text-muted);">search volume Apr → May, expected post-campaign</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="page">
+    <div class="footer-inner">
+      <div class="footer-copy">Coca-Cola DAM &nbsp;·&nbsp; Platform Intelligence Report &nbsp;·&nbsp; 2025 YTD (Jan–May)</div>
+      <div class="footer-links">
+        <a href="https://assets.coke.com" target="_blank">assets.coke.com</a>
+        <a href="#">User Report</a>
+        <a href="#">Downloads Report</a>
+        <a href="#">Search Report</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
