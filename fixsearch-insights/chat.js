@@ -100,12 +100,12 @@
         '<div class="chat-bubble" style="padding:12px 14px;">',
         '<div style="margin-bottom:8px;font-size:12px;color:#8b8fa8;">',
         'SLICC is not available. Enter an Anthropic API key to use chat directly.',
-        '<br.”Mõ<span style="font-size:11px;opacity:0.7;".”MõStored in sessionStorage only ‚Äî cleared when tab closes.</span>',
+        '<br><span style="font-size:11px;opacity:0.7;">Stored in sessionStorage only ‚Äî cleared when tab closes.</span>',
         '</div>',
         '<div style="display:flex;gap:6px;">',
         '<input id="api-key-input" type="password" placeholder="sk-ant-..." ',
         'style="flex:1;background:#0f1014;border:1px solid #2e3140;border-radius:6px;',
-        'color:#e8eaf0;padding:6px 8px;font-size:12px;font-family:monospace;outline:none;" /.”Mõ',
+        'color:#e8eaf0;padding:6px 8px;font-size:12px;font-family:monospace;outline:none;" />',
         '<button id="api-key-submit" ',
         'style="background:#F40009;color:#fff;border:none;border-radius:6px;padding:6px 12px;',
         'font-size:12px;cursor:pointer;white-space:nowrap;">Save</button>',
@@ -190,7 +190,7 @@
           if (String(err.message).match(/auth|key|401|invalid/i)) {
             storedKey = null;
             try { sessionStorage.removeItem('dam_chat_api_key'); } catch (e) {}
-            addMsg('assistant', &Ì4Ÿ≤ö†Î¥”f¯è API key invalid or expired. Click send again to enter a new key.');
+            addMsg('assistant', '‚ö†Ô∏è API key invalid or expired. Click send again to enter a new key.');
           } else {
             addMsg('assistant', '‚ö†Ô∏è Error: ' + err.message);
           }
