@@ -560,7 +560,7 @@
   <section class="hero">
     <div class="hero-label">Platform Intelligence Report</div>
     <h1 class="hero-title">DAM Analytics Dashboard</h1>
-    <p class="hero-sub">Unified analysis — this instance shows search result improvements vs production. The zero-result problem is fixed here.</p>
+    <p class="hero-sub">Unified analysis across search, users, and downloads · Jan–May 2026</p>
     <div class="hero-url">fixsearchresultreport.assets.coke.com</div>
   </section>
 
@@ -599,7 +599,7 @@
     <div class="kpi-card">
       <div class="kpi-label">Zero-Result Rate</div>
       <div class="kpi-value kpi-green">~6.4%</div>
-      <div class="kpi-sub" style="color: var(--green);">↓ 91% vs prod 78.9%</div>
+      <div class="kpi-sub" style="color: var(--green);">of non-backfilled searches</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Download Conv.</div>
@@ -620,7 +620,7 @@
       <div class="insight-card green">
         <div class="insight-num">~6.4%</div>
         <div class="insight-label">Search FIXED</div>
-        <div class="insight-sub">Zero-result rate vs 78.9% on production — 91% improvement</div>
+        <div class="insight-sub">~6.4% of non-backfilled searches return zero results</div>
       </div>
       <div class="insight-card red">
         <div class="insight-num">52.2%</div>
@@ -653,32 +653,26 @@
   <section class="section" id="s2">
     <div class="section-header">
       <div class="section-badge">2</div>
-      <h2 class="section-title">Search Health: Fixed vs Production</h2>
+      <h2 class="section-title">Search Health</h2>
     </div>
-    <p class="section-desc">The most important finding — this instance has fundamentally fixed the zero-result problem.</p>
+    <p class="section-desc">~6.4% of searches return zero results. Remaining failures are narrow — obscure hashtags and numeric asset IDs, not popular brand terms.</p>
 
     <div class="search-compare">
-      <div class="search-stat-box bad">
-        <div class="search-stat-site">Production</div>
-        <div class="search-stat-pct">78.9%</div>
-        <div class="search-stat-label">Zero-result rate</div>
-        <div class="search-stat-url">assets.coke.com</div>
-      </div>
-      <div class="compare-arrow">
-        <div class="compare-arrow-icon">↓</div>
-        <div class="compare-arrow-label">91% improvement</div>
-        <div class="compare-arrow-sub">in zero results</div>
-      </div>
-      <div class="search-stat-box good">
-        <div class="search-stat-site">This Instance</div>
+      <div class="search-stat-box good" style="max-width:320px;">
         <div class="search-stat-pct">~6.4%</div>
         <div class="search-stat-label">Zero-result rate</div>
-        <div class="search-stat-url">fixsearchresultreport.assets.coke.com</div>
+        <div class="search-stat-url" style="color:var(--muted);font-size:11px;">3,265 of 50,321 non-backfilled searches</div>
+      </div>
+      <div style="flex:1;padding:0 24px;color:var(--muted);font-size:13px;line-height:1.7;">
+        <strong style="color:var(--text);">Top search terms return results.</strong><br>
+        a250, fifa, fanta, sprite, coca-cola and other brand terms all surface assets.<br><br>
+        Remaining zero-result searches are narrow: obscure internal hashtags (<code style="color:var(--dim);font-size:11px;">#fantapackagingsystemtemplates</code>),
+        numeric IDs, and long-tail queries that likely don't map to any asset in the library.
       </div>
     </div>
 
     <div class="search-insight">
-      <strong>Key finding:</strong> Top search terms (a250, fifa, fanta, sprite, coca-cola) now return results. Zero-result searches on this instance are now limited to obscure internal hashtags and numeric asset IDs that likely don't exist in the library — not popular brand terms.
+      <strong>Key finding:</strong> Top search terms (a250, fifa, fanta, sprite, coca-cola) all return results. Remaining zero-result searches are narrow: obscure internal hashtags and numeric asset IDs that likely don't exist in the library.
       <br><br>
       <strong>Note on data:</strong> The "No data (backfilled)" category (184,357 searches) represents pre-migration data being ingested — not actual zero-result searches. Actual zero-result rate is calculated from 50,321 non-backfilled searches only (3,265 ÷ 50,321 = 6.5%).
     </div>
