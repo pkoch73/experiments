@@ -862,11 +862,10 @@ function escHtml(s) {
     ctx.fillText(rv2 >= 1000 ? (rv2/1000).toFixed(0)+'k' : rv2, w - pad.right + 40, ry2 + 3);
   }
 
-  // Downloads line (orange)
+  // Downloads line (orange, solid)
   ctx.strokeStyle = C.orange;
-  ctx.lineWidth = 2.5;
+  ctx.lineWidth = 3;
   ctx.lineJoin = 'round';
-  ctx.setLineDash([5, 3]);
   ctx.beginPath();
   months.forEach(function(_, i) {
     var x = toX(i);
@@ -874,7 +873,6 @@ function escHtml(s) {
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
   ctx.stroke();
-  ctx.setLineDash([]);
 
   // Users line (red, solid)
   ctx.strokeStyle = C.red;
@@ -893,23 +891,25 @@ function escHtml(s) {
     { data: dlrs,  color: C.orange, toY: toYDlrs  }
   ].forEach(function(series) {
     months.forEach(function(_, i) {
+      if (series.data[i] === 0) return;
       var x = toX(i);
       var y = series.toY(series.data[i]);
+      // White outline ring for visibility over bars
       ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.arc(x, y, 7, 0, Math.PI * 2);
+      ctx.fillStyle = C.bg;
+      ctx.fill();
+      // Colored dot
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.fillStyle = series.color;
       ctx.fill();
-      ctx.strokeStyle = C.bg;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-      // Value label above dot
-      if (series.data[i] > 0) {
-        ctx.fillStyle = series.color;
-        ctx.font = 'bold 9px system-ui';
-        ctx.textAlign = 'center';
-        var label = series.data[i] >= 1000 ? (series.data[i]/1000).toFixed(1)+'k' : series.data[i];
-        ctx.fillText(label, x, y - 8);
-      }
+      // Value label
+      ctx.fillStyle = series.color;
+      ctx.font = 'bold 10px system-ui';
+      ctx.textAlign = 'center';
+      var label = series.data[i] >= 1000 ? (series.data[i]/1000).toFixed(1)+'k' : series.data[i];
+      ctx.fillText(label, x, y - 12);
     });
   });
 
