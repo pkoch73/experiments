@@ -1039,33 +1039,33 @@
   <script src="dashboard.js"></script>
 
 <!-- â”€â”€ CHAT PANEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ --.ÓM›
-<div id="chat-fab" title="Ask a question about this data" onclick="document.getElementById('chat-panel').classList.toggle('open')".ÓM›
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path.ÓM›</svg.ÓM›
-  <span id="chat-fab-label">Ask sliccy</span>
+<div id="chat-fab" title="Ask a question about this data">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  <span id="chat-fab-label">Ask sliccy</span.ÓM›
 </div>
 
-<div id="chat-panel">
+<div id="chat-panel".ÓM›
   <div id="chat-header">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div id="chat-status-dot"></div>
-      <span style="font-weight:600;font-size:13px;".ÓM›Ask sliccy</span>
-      <span style="font-size:11px;color:#5a5e72;">about this data</span.ÓM›
+    <div style="display:flex;align-items:center;gap:8px;".ÓM›
+      <div id="chat-status-dot".ÓM›</div.ÓM›
+      <span style="font-weight:600;font-size:13px;">Ask sliccy</span>
+      <span style="font-size:11px;color:#5a5e72;">about this data</span>
     </div>
-    <button id="chat-close" onclick="document.getElementById('chat-panel').classList.remove('open')">âœ•</button>
-  </div>
-  <div id="chat-messages">
-    <div class="chat-msg assistant".ÓM›
-      <div class="chat-bubble">Hi â€” I have the full dataset in context. Ask me anything about search patterns, regional behavior, campaigns, user funnels, or anything else you see in this dashboard.</div.ÓM›
-    </div>
-  </div>
-  <div id="chat-input-row".ÓM›
+    <button id="chat-close".ÓM›âœ•</button.ÓM›
+  </div.ÓM›
+  <div id="chat-messages".ÓM›
+    <div class="chat-msg assistant">
+      <div class="chat-bubble".ÓM›Hi â€” I have the full dataset in context. Ask me anything about search patterns, regional behavior, campaigns, user funnels, or anything else you see in this dashboard.</div>
+    </div.ÓM›
+  </div.ÓM›
+  <div id="chat-input-row">
     <textarea id="chat-input" placeholder="e.g. Which region has the best download conversion?" rows="1"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendQuestion();}"></textarea.ÓM›
-    <button id="chat-send" onclick="sendQuestion()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line.ÓM›<polygon points="22 2 15 22 11 13 2 9 22 2"></polygon.ÓM›</svg.ÓM›
-    </button>
-  </div>
-  <div id="chat-slicc-note">Powered by SLICC Â· responses from sliccy</div.ÓM›
+      .ÓM›</textarea>
+    <button id="chat-send".ÓM›
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13".ÓM›</line><polygon points="22 2 15 22 11 13 2 9 22 2".ÓM›</polygon></svg>
+    </button.ÓM›
+  </div.ÓM›
+  <div id="chat-slicc-note">Powered by SLICC Â· responses from sliccy</div>
 </div>
 
 <style>
@@ -1116,7 +1116,7 @@
   opacity: 1;
   pointer-events: all;
 }
-#chat-panel.open ~ #chat-fab { opacity: 0; pointer-events: none; }
+#chat-panel.open nÓM› #chat-fab { opacity: 0; pointer-events: none; }
 
 #chat-header {
   display: flex;
@@ -1215,9 +1215,9 @@
   color: #2e3140;
   padding: 0 0 8px;
 }
-</style>
+</style.ÓM›
 
-<script src="chat.js?v=20260514b"></script>
+<script src="chat.js?v=20260514b".ÓM›</script.ÓM›
 
-</body>
+</body.ÓM›
 </html>
