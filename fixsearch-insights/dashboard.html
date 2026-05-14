@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAM Intelligence · fixsearchresultreport.assets.coke.com</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1014;
+      --surface: #1a1c22;
+      --surface2: #22252e;
+      --border: #2e3140;
+      --text: #e8eaf0;
+      --muted: #8b8fa8;
+      --dim: #5a5e72;
+      --red: #F40009;
+      --green: #22c55e;
+      --orange: #fb923c;
+      --yellow: #fbbf24;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,16,20,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 0 24px;
+      height: 48px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--red);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      margin-right: 20px;
+    }
+    .nav-brand span {
+      color: var(--text);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface2); }
+    .nav-badge {
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      margin-left: 8px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 60px 24px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 600px;
+    }
+    .hero-url {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--dim);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-top: 16px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    /* ── KPI STRIP ── */
+    .kpi-strip {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 5px;
+    }
+    .kpi-green { color: var(--green); }
+    .kpi-red { color: var(--red); }
+    .kpi-blue { color: var(--blue); }
+    .kpi-orange { color: var(--orange); }
+    .kpi-yellow { color: var(--yellow); }
+    .kpi-purple { color: var(--purple); }
+
+    /* ── SECTION LAYOUT ── */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto 64px;
+      padding: 0 24px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-badge {
+      width: 28px;
+      height: 28px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 40px;
+      margin-top: -16px;
+      margin-bottom: 20px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── GRID UTILITIES ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) {
+      .grid-4 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ── INSIGHT CARDS (Section 1) ── */
+    .insight-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .insight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .insight-card.green { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); }
+    .insight-card.red { border-color: rgba(244,0,9,0.3); background: rgba(244,0,9,0.05); }
+    .insight-card.orange { border-color: rgba(251,146,60,0.3); background: rgba(251,146,60,0.05); }
+    .insight-card.blue { border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.05); }
+    .insight-num {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .insight-card.green .insight-num { color: var(--green); }
+    .insight-card.red .insight-num { color: var(--red); }
+    .insight-card.orange .insight-num { color: var(--orange); }
+    .insight-card.blue .insight-num { color: var(--blue); }
+    .insight-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .insight-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── SEARCH HEALTH ── */
+    .search-compare {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .search-stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .search-stat-box.bad { border-color: rgba(244,0,9,0.5); background: rgba(244,0,9,0.07); }
+    .search-stat-box.good { border-color: rgba(34,197,94,0.5); background: rgba(34,197,94,0.07); }
+    .search-stat-site {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .search-stat-pct {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .bad .search-stat-pct { color: var(--red); }
+    .good .search-stat-pct { color: var(--green); }
+    .search-stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .search-stat-url {
+      font-size: 11px;
+      color: var(--dim);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      margin-top: 6px;
+    }
+    .compare-arrow {
+      text-align: center;
+    }
+    .compare-arrow-icon {
+      font-size: 36px;
+      color: var(--green);
+      line-height: 1;
+    }
+    .compare-arrow-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green);
+      margin-top: 4px;
+    }
+    .compare-arrow-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── TABLES ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .data-table td {
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid rgba(46,49,64,0.5);
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+    .data-table td.rank { color: var(--dim); font-size: 12px; width: 32px; }
+    .data-table td.tag {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--orange);
+    }
+    .data-table td.muted { color: var(--muted); }
+    .yoy-pos { color: var(--green); font-weight: 600; }
+    .yoy-neg { color: var(--red); font-weight: 600; }
+
+    /* ── ROLE CARDS ── */
+    .role-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .role-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .role-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .role-badge.power { background: rgba(168,85,247,0.2); color: var(--purple); border: 1px solid rgba(168,85,247,0.3); }
+    .role-badge.value { background: rgba(59,130,246,0.2); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+    .role-badge.standard { background: rgba(139,143,168,0.15); color: var(--muted); border: 1px solid var(--border); }
+    .role-badge.analyst { background: rgba(251,191,36,0.15); color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+    .role-stat-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .role-stat {
+      flex: 1;
+      min-width: 0;
+    }
+    .role-stat-val {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .role-stat-key {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+    }
+    .role-per-row {
+      display: flex;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .role-per {
+      flex: 1;
+      text-align: center;
+    }
+    .role-per-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .role-per-key {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* ── CAMPAIGN TABLE ── */
+    .campaign-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    /* ── CHART CONTAINERS ── */
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+    }
+    canvas {
+      display: block;
+    }
+
+    /* ── FILTER INSIGHT ── */
+    .filter-insight {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--blue);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    /* ── SEARCH INSIGHT ── */
+    .search-insight {
+      background: rgba(34,197,94,0.06);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .search-insight strong { color: var(--green); }
+
+    /* ── FOOTER ── */
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    footer p {
+      font-size: 12px;
+      color: var(--dim);
+    }
+    footer a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--text); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 1200px;
+      margin: 0 auto 48px;
+    }
+
+    /* ── SPLIT LAYOUT ── */
+    .split-60-40 {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 16px;
+    }
+    .split-40-60 {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 16px;
+    }
+    @media (max-width: 800px) {
+      .split-60-40, .split-40-60 {
+        grid-template-columns: 1fr;
+      }
+      .search-compare {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">C DAM <span>·</span> Fix Preview</div>
+    <div class="nav-links">
+      <a href="#s1" class="nav-link">Overview</a>
+      <a href="#s3" class="nav-link">Funnel</a>
+      <a href="#s2" class="nav-link">Search Health</a>
+      <a href="#s4" class="nav-link">Filters</a>
+      <a href="#s5" class="nav-link">Regions</a>
+      <a href="#s6" class="nav-link">Roles</a>
+      <a href="#s7" class="nav-link">Campaigns</a>
+      <a href="#s8" class="nav-link">Trends</a>
+    </div>
+    <div class="nav-badge">2026 YTD · Jan–May</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label">Platform Intelligence Report</div>
+    <h1 class="hero-title">DAM Analytics Dashboard</h1>
+    <p class="hero-sub">Unified analysis — this instance shows search result improvements vs production. The zero-result problem is fixed here.</p>
+    <div class="hero-url">fixsearchresultreport.assets.coke.com</div>
+  </section>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-label">Unique Users</div>
+      <div class="kpi-value kpi-blue">5,147</div>
+      <div class="kpi-sub">5,148 first-time users</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Logins</div>
+      <div class="kpi-value">55,985</div>
+      <div class="kpi-sub">Across all roles</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Unique Searchers</div>
+      <div class="kpi-value kpi-blue">4,527</div>
+      <div class="kpi-sub">87.9% of users</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Searches</div>
+      <div class="kpi-value">234,660</div>
+      <div class="kpi-sub">Assets + Templates + Products</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Unique Downloaders</div>
+      <div class="kpi-value kpi-orange">2,689</div>
+      <div class="kpi-sub">52.2% of users</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Downloads</div>
+      <div class="kpi-value">30,833</div>
+      <div class="kpi-sub">Assets: 28,191 · Tmpl: 2,642</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Zero-Result Rate</div>
+      <div class="kpi-value kpi-green">~6.4%</div>
+      <div class="kpi-sub" style="color: var(--green);">↓ 91% vs prod 78.9%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Download Conv.</div>
+      <div class="kpi-value kpi-purple">52.2%</div>
+      <div class="kpi-sub">Users who download</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: OVERVIEW -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-badge">1</div>
+      <h2 class="section-title">Platform Overview</h2>
+    </div>
+    <p class="section-desc">Cross-report summary with key insights and monthly activity.</p>
+
+    <div class="insight-cards">
+      <div class="insight-card green">
+        <div class="insight-num">~6.4%</div>
+        <div class="insight-label">Search FIXED</div>
+        <div class="insight-sub">Zero-result rate vs 78.9% on production — 91% improvement</div>
+      </div>
+      <div class="insight-card red">
+        <div class="insight-num">52.2%</div>
+        <div class="insight-label">Download Gap</div>
+        <div class="insight-sub">Half of all users never download any asset</div>
+      </div>
+      <div class="insight-card orange">
+        <div class="insight-num">47.5%</div>
+        <div class="insight-label">Unattributed Downloads</div>
+        <div class="insight-sub">Campaign tagging still an issue — 3,731 unknown + 10,477 no-campaign</div>
+      </div>
+      <div class="insight-card blue">
+        <div class="insight-num">16.4</div>
+        <div class="insight-label">Agency Downloads/User</div>
+        <div class="insight-sub">Agency users are the highest-value segment by download intensity</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Monthly Activity — Searches / 1000, Downloads, Logins / 100</div>
+      <div class="chart-wrap">
+        <canvas id="overviewChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 2: SEARCH HEALTH -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-badge">2</div>
+      <h2 class="section-title">Search Health: Fixed vs Production</h2>
+    </div>
+    <p class="section-desc">The most important finding — this instance has fundamentally fixed the zero-result problem.</p>
+
+    <div class="search-compare">
+      <div class="search-stat-box bad">
+        <div class="search-stat-site">Production</div>
+        <div class="search-stat-pct">78.9%</div>
+        <div class="search-stat-label">Zero-result rate</div>
+        <div class="search-stat-url">assets.coke.com</div>
+      </div>
+      <div class="compare-arrow">
+        <div class="compare-arrow-icon">↓</div>
+        <div class="compare-arrow-label">91% improvement</div>
+        <div class="compare-arrow-sub">in zero results</div>
+      </div>
+      <div class="search-stat-box good">
+        <div class="search-stat-site">This Instance</div>
+        <div class="search-stat-pct">~6.4%</div>
+        <div class="search-stat-label">Zero-result rate</div>
+        <div class="search-stat-url">fixsearchresultreport.assets.coke.com</div>
+      </div>
+    </div>
+
+    <div class="search-insight">
+      <strong>Key finding:</strong> Top search terms (a250, fifa, fanta, sprite, coca-cola) now return results. Zero-result searches on this instance are now limited to obscure internal hashtags and numeric asset IDs that likely don't exist in the library — not popular brand terms.
+      <br><br>
+      <strong>Note on data:</strong> The "No data (backfilled)" category (184,357 searches) represents pre-migration data being ingested — not actual zero-result searches. Actual zero-result rate is calculated from 50,321 non-backfilled searches only (3,265 ÷ 50,321 = 6.5%).
+    </div>
+
+    <div class="split-60-40">
+      <div class="card">
+        <div class="card-title">Result Size Distribution (Non-Backfilled: 50,321 searches)</div>
+        <div class="chart-wrap">
+          <canvas id="resultDonut"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Top 20 Zero-Result Searches</div>
+        <div style="overflow-x:auto; max-height: 320px; overflow-y: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Term</th>
+                <th style="text-align:right">Searches</th>
+                <th style="text-align:right">Searchers</th>
+              </tr>
+            </thead>
+            <tbody id="zero-result-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 3: FUNNEL -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-badge">3</div>
+      <h2 class="section-title">Engagement Funnel</h2>
+    </div>
+    <p class="section-desc">From login to download — where users drop off.</p>
+
+    <div class="card">
+      <div class="card-title">Users → Searchers → Downloaders</div>
+      <div class="chart-wrap">
+        <canvas id="funnelCanvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 4: FILTERS -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-badge">4</div>
+      <h2 class="section-title">How Users Refine Searches</h2>
+    </div>
+    <p class="section-desc">Filter usage patterns reveal how users narrow results to their market and use case.</p>
+
+    <div class="split-40-60">
+      <div class="card">
+        <div class="card-title">Filter Usage Breakdown</div>
+        <div class="chart-wrap">
+          <canvas id="filterUsageDonut"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Top 10 Filter Combinations</div>
+        <div class="chart-wrap">
+          <canvas id="filterBarsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-insight">
+      <strong style="color: var(--blue);">Insight:</strong> <code style="font-size:12px;color:var(--orange)">templateStatus</code> is the most-used single filter — users are actively filtering by publish status. The high usage of <code style="font-size:12px;color:var(--orange)">brand | intendedBottlerCountry</code> combinations shows users trying to narrow to assets relevant to their specific market.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 5: REGIONS -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-badge">5</div>
+      <h2 class="section-title">Regional Intelligence</h2>
+    </div>
+    <p class="section-desc">NA dominates volume; INSWA and AFR show strongest YoY growth.</p>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <div class="card-title">Search Volume by Region</div>
+      <div class="chart-wrap">
+        <canvas id="regionChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Regional Breakdown</div>
+      <div style="overflow-x: auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Region</th>
+              <th style="text-align:right">Users</th>
+              <th style="text-align:right">Searches</th>
+              <th style="text-align:right">Downloads</th>
+              <th style="text-align:right">S/User</th>
+              <th style="text-align:right">D/User</th>
+              <th style="text-align:right">L/User</th>
+              <th style="text-align:right">YoY</th>
+            </tr>
+          </thead>
+          <tbody id="region-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 6: ROLES -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="section-badge">6</div>
+      <h2 class="section-title">Role Behavior</h2>
+    </div>
+    <p class="section-desc">Agency users are the highest-intensity segment; Bottler users drive high download volume.</p>
+
+    <div class="grid-4" style="margin-bottom: 20px;">
+      <div class="role-card">
+        <div class="role-name">Associate</div>
+        <span class="role-badge standard">Standard</span>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">2,636</div>
+            <div class="role-stat-key">Users</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">83,633</div>
+            <div class="role-stat-key">Searches</div>
+          </div>
+        </div>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">9,883</div>
+            <div class="role-stat-key">Downloads</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">11,024</div>
+            <div class="role-stat-key">Logins</div>
+          </div>
+        </div>
+        <div class="role-per-row">
+          <div class="role-per">
+            <div class="role-per-val">31.7</div>
+            <div class="role-per-key">S/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--green)">7.2</div>
+            <div class="role-per-key">D/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--muted)">4.2</div>
+            <div class="role-per-key">L/User</div>
+          </div>
+        </div>
+      </div>
+      <div class="role-card" style="border-color: rgba(168,85,247,0.3);">
+        <div class="role-name">Agency</div>
+        <span class="role-badge power">Power User</span>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">963</div>
+            <div class="role-stat-key">Users</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">67,025</div>
+            <div class="role-stat-key">Searches</div>
+          </div>
+        </div>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">9,551</div>
+            <div class="role-stat-key">Downloads</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">7,038</div>
+            <div class="role-stat-key">Logins</div>
+          </div>
+        </div>
+        <div class="role-per-row">
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--purple)">69.6</div>
+            <div class="role-per-key">S/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--purple)">16.4</div>
+            <div class="role-per-key">D/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--purple)">7.3</div>
+            <div class="role-per-key">L/User</div>
+          </div>
+        </div>
+      </div>
+      <div class="role-card" style="border-color: rgba(59,130,246,0.3);">
+        <div class="role-name">Bottler</div>
+        <span class="role-badge value">High Value</span>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">1,645</div>
+            <div class="role-stat-key">Users</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">83,312</div>
+            <div class="role-stat-key">Searches</div>
+          </div>
+        </div>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">12,334</div>
+            <div class="role-stat-key">Downloads</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">9,168</div>
+            <div class="role-stat-key">Logins</div>
+          </div>
+        </div>
+        <div class="role-per-row">
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--blue)">50.6</div>
+            <div class="role-per-key">S/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--blue)">15.7</div>
+            <div class="role-per-key">D/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--blue)">5.6</div>
+            <div class="role-per-key">L/User</div>
+          </div>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="role-name">Other</div>
+        <span class="role-badge analyst">Analyst?</span>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">66</div>
+            <div class="role-stat-key">Users</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">7,704</div>
+            <div class="role-stat-key">Searches</div>
+          </div>
+        </div>
+        <div class="role-stat-row">
+          <div class="role-stat">
+            <div class="role-stat-val">—</div>
+            <div class="role-stat-key">Downloads</div>
+          </div>
+          <div class="role-stat">
+            <div class="role-stat-val">811</div>
+            <div class="role-stat-key">Logins</div>
+          </div>
+        </div>
+        <div class="role-per-row">
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--yellow)">116.7</div>
+            <div class="role-per-key">S/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--dim)">0</div>
+            <div class="role-per-key">D/User</div>
+          </div>
+          <div class="role-per">
+            <div class="role-per-val" style="color:var(--muted)">12.3</div>
+            <div class="role-per-key">L/User</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Per-User Metrics by Role (S/User, D/User, L/User)</div>
+      <div class="chart-wrap">
+        <canvas id="roleChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 7: CAMPAIGNS -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <div class="section-badge">7</div>
+      <h2 class="section-title">Campaign Performance</h2>
+    </div>
+    <p class="section-desc">FIFA WC 2026 and America 250 are the top attributed campaigns; campaign tagging coverage is ~52%.</p>
+
+    <div class="split-60-40">
+      <div class="card">
+        <div class="card-title">Top 10 Campaigns by Downloads</div>
+        <div class="chart-wrap">
+          <canvas id="campaignChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Campaign Detail</div>
+        <div style="overflow-y:auto; max-height: 340px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Campaign</th>
+                <th style="text-align:right">DLs</th>
+                <th style="text-align:right">Dlrs</th>
+                <th style="text-align:right">OUs</th>
+              </tr>
+            </thead>
+            <tbody id="campaign-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 8: TRENDS -->
+  <section class="section" id="s8">
+    <div class="section-header">
+      <div class="section-badge">8</div>
+      <h2 class="section-title">Monthly Trends</h2>
+    </div>
+    <p class="section-desc">April was peak month; retention building as new-user % drops over time.</p>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <div class="card-title">Search Events by Type (Assets · Products · Templates) + Users & Downloaders</div>
+      <div class="chart-wrap">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">New vs Returning Visitors</div>
+      <div class="chart-wrap">
+        <canvas id="newReturnChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <p>Source: <strong style="color:var(--muted)">fixsearchresultreport.assets.coke.com</strong></p>
+      <p style="margin-top:4px">2026 YTD · January through May · Platform Intelligence Report</p>
+    </div>
+    <div>
+      <a href="#">← Report Hub</a>
+    </div>
+  </footer>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
