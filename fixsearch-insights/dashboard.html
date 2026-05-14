@@ -1037,5 +1037,187 @@
   </footer>
 
   <script src="dashboard.js"></script>
+
+<!-- ── CHAT PANEL ──────────────────────────────────────────────────────────── -->
+<div id="chat-fab" title="Ask a question about this data" onclick="document.getElementById('chat-panel').classList.toggle('open')">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  <span id="chat-fab-label">Ask sliccy</span>
+</div>
+
+<div id="chat-panel">
+  <div id="chat-header">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="chat-status-dot"></div>
+      <span style="font-weight:600;font-size:13px;">Ask sliccy</span>
+      <span style="font-size:11px;color:#5a5e72;">about this data</span>
+    </div>
+    <button id="chat-close" onclick="document.getElementById('chat-panel').classList.remove('open')">✕</button>
+  </div>
+  <div id="chat-messages">
+    <div class="chat-msg assistant">
+      <div class="chat-bubble">Hi — I have the full dataset in context. Ask me anything about search patterns, regional behavior, campaigns, user funnels, or anything else you see in this dashboard.</div>
+    </div>
+  </div>
+  <div id="chat-input-row">
+    <textarea id="chat-input" placeholder="e.g. Which region has the best download conversion?" rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendQuestion();}"></textarea>
+    <button id="chat-send" onclick="sendQuestion()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </button>
+  </div>
+  <div id="chat-slicc-note">Powered by SLICC · responses from sliccy</div>
+</div>
+
+<style>
+#chat-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: #F40009;
+  color: #fff;
+  border: none;
+  border-radius: 28px;
+  padding: 12px 18px 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(244,0,9,0.4);
+  z-index: 1000;
+  transition: transform 0.15s, box-shadow 0.15s;
+  user-select: none;
+}
+#chat-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(244,0,9,0.5); }
+
+#chat-panel {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 380px;
+  max-height: 520px;
+  background: #1a1c22;
+  border: 1px solid #2e3140;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  z-index: 1001;
+  font-family: system-ui, -apple-system, sans-serif;
+  transform: scale(0.92) translateY(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+#chat-panel.open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+#chat-panel.open ~ #chat-fab { opacity: 0; pointer-events: none; }
+
+#chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid #2e3140;
+}
+#chat-status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+#chat-close {
+  background: none; border: none; color: #5a5e72;
+  cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 4px;
+}
+#chat-close:hover { color: #e8eaf0; background: #22252e; }
+
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.chat-msg { display: flex; }
+.chat-msg.user { justify-content: flex-end; }
+.chat-bubble {
+  max-width: 88%;
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #e8eaf0;
+}
+.chat-msg.assistant .chat-bubble {
+  background: #22252e;
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.user .chat-bubble {
+  background: #F40009;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.thinking .chat-bubble {
+  color: #5a5e72;
+  background: #22252e;
+  font-style: italic;
+}
+
+#chat-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid #2e3140;
+}
+#chat-input {
+  flex: 1;
+  background: #22252e;
+  border: 1px solid #2e3140;
+  border-radius: 10px;
+  color: #e8eaf0;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 8px 12px;
+  resize: none;
+  outline: none;
+  line-height: 1.45;
+  max-height: 100px;
+  overflow-y: auto;
+}
+#chat-input:focus { border-color: #F40009; }
+#chat-input::placeholder { color: #5a5e72; }
+#chat-send {
+  background: #F40009;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+#chat-send:hover { background: #cc0007; }
+#chat-send:disabled { background: #2e3140; cursor: default; }
+
+#chat-slicc-note {
+  text-align: center;
+  font-size: 10px;
+  color: #2e3140;
+  padding: 0 0 8px;
+}
+</style>
+
+<script src="chat.js"></script>
+
 </body>
 </html>
