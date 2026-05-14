@@ -58,10 +58,27 @@
     "Gap: 620 never searched (12%), 1838 searched but never downloaded (35.7%)"
   ].join("\n");
 
+  // Wire up buttons (inline onclick is sandboxed in chrome-extension preview)
+  document.getElementById('chat-fab').addEventListener('click', function () {
+    document.getElementById('chat-panel').classList.toggle('open');
+  });
+  document.getElementById('chat-close').addEventListener('click', function () {
+    document.getElementById('chat-panel').classList.remove('open');
+  });
+  sendBtn.addEventListener('click', function () { window.sendQuestion(); });
+
   // Auto-resize textarea
   input.addEventListener('input', function () {
     input.style.height = 'auto';
     input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  });
+
+  // Enter to send
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      window.sendQuestion();
+    }
   });
 
   // ── API key management ──────────────────────────────────────────────────────
