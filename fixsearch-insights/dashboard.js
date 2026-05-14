@@ -837,43 +837,79 @@ function escHtml(s) {
     });
   });
 
-  // Right axis scale for users (max ~4000 → map to chart height)
-  var maxLine = 4500;
-  function toYLine(v) { return pad.top + chartH - (v / maxLine) * chartH; }
+  // Each line uses its own scale so both are visible
+  var maxUsers = Math.max.apply(null, users) * 1.15;
+  var maxDlrs  = Math.max.apply(null, dlrs)  * 1.15;
+  function toYUsers(v) { return pad.top + chartH - (v / maxUsers) * chartH; }
+  function toYDlrs(v)  { return pad.top + chartH - (v / maxDlrs)  * chartH; }
 
-  // Downloaders line
+  // Right axis (users)
+  ctx.textAlign = 'left';
+  ctx.fillStyle = C.red;
+  ctx.font = '9px system-ui';
+  for (var r = 0; r <= 3; r++) {
+    var rv = Math.round(maxUsers / 3 * r);
+    var ry = toYUsers(rv);
+    ctx.fillText(rv >= 1000 ? (rv/1000).toFixed(1)+'k' : rv, w - pad.right + 6, ry + 3);
+  }
+
+  // Far-right axis (downloads, offset)
+  ctx.fillStyle = C.orange;
+  ctx.font = '9px system-ui';
+  for (var r2 = 0; r2 <= 3; r2++) {
+    var rv2 = Math.round(maxDlrs / 3 * r2);
+    var ry2 = toYDlrs(rv2);
+    ctx.fillText(rv2 >= 1000 ? (rv2/1000).toFixed(0)+'k' : rv2, w - pad.right + 40, ry2 + 3);
+  }
+
+  // Downloads line (orange)
   ctx.strokeStyle = C.orange;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.5;
   ctx.lineJoin = 'round';
+  ctx.setLineDash([5, 3]);
   ctx.beginPath();
   months.forEach(function(_, i) {
     var x = toX(i);
-    var y = toYLine(dlrs[i]);
+    var y = toYDlrs(dlrs[i]);
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
   ctx.stroke();
+  ctx.setLineDash([]);
 
-  // Users line
+  // Users line (red, solid)
   ctx.strokeStyle = C.red;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
   months.forEach(function(_, i) {
     var x = toX(i);
-    var y = toYLine(users[i]);
+    var y = toYUsers(users[i]);
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
   ctx.stroke();
 
-  // Dots
-  [{ data: users, color: C.red }, { data: dlrs, color: C.orange }].forEach(function(series) {
+  // Dots + value labels
+  [
+    { data: users, color: C.red,    toY: toYUsers },
+    { data: dlrs,  color: C.orange, toY: toYDlrs  }
+  ].forEach(function(series) {
     months.forEach(function(_, i) {
+      var x = toX(i);
+      var y = series.toY(series.data[i]);
       ctx.beginPath();
-      ctx.arc(toX(i), toYLine(series.data[i]), 4, 0, Math.PI * 2);
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fillStyle = series.color;
       ctx.fill();
       ctx.strokeStyle = C.bg;
       ctx.lineWidth = 1.5;
       ctx.stroke();
+      // Value label above dot
+      if (series.data[i] > 0) {
+        ctx.fillStyle = series.color;
+        ctx.font = 'bold 9px system-ui';
+        ctx.textAlign = 'center';
+        var label = series.data[i] >= 1000 ? (series.data[i]/1000).toFixed(1)+'k' : series.data[i];
+        ctx.fillText(label, x, y - 8);
+      }
     });
   });
 
