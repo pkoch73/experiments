@@ -149,28 +149,10 @@
     pending = true;
     sendBtn.disabled = true;
 
-    // ── Path A: SLICC bridge — only when running inside the SLICC extension preview ──
-    // The extension injects slicc on ALL pages, but the licj�4ٲ��response round-trip
-    // only works when the cone is idle. Restrict to chrome-extension:// origin only.
-    var isExtensionPreview = location.protocol === 'chrome-extension:';
-    if (isExtensionPreview && typeof slicc !== 'undefined' && typeof slicc.lick === 'function') {
-      setStatusDot('slicc');
-      window.__damChatAnswer = function (answer) {
-        removeMsg(thinkingId);
-        addMsg('assistant', answer);
-        pending = false;
-        sendBtn.disabled = false;
-        window.__damChatAnswer = null;
-      };
-      slicc.lick('dam-chat', {
-        question: q,
-        context: 'fixsearch-insights-dashboard',
-        source: location.href
-      });
-      return;
-    }
+    // SLICC lick path removed — slicc bridge is not available inside chrome-extension://
+    // preview pages. Both preview and GitHub Pages use the direct API path below.
 
-    // ── Path B: Direct Anthropic API ────────────────────────────────────────
+    // ── Direct Anthropic API ─────────────────────────────────────────────────
     setStatusDot('api');
 
     function callApi(key) {
@@ -208,7 +190,7 @@
           if (String(err.message).match(/auth|key|401|invalid/i)) {
             storedKey = null;
             try { sessionStorage.removeItem('dam_chat_api_key'); } catch (e) {}
-            addMsg('assistant', '⚠️ API key invalid or expired. Click send again to enter a new key.');
+            addMsg('assistant', &�4ٲ����f�� API key invalid or expired. Click send again to enter a new key.');
           } else {
             addMsg('assistant', '⚠️ Error: ' + err.message);
           }
@@ -254,14 +236,8 @@
       dot.style.background = '#5a5e72';
       dot.style.flexShrink = '0';
     }
-    var isExtensionPreview = location.protocol === 'chrome-extension:';
-    if (isExtensionPreview && typeof slicc !== 'undefined' && typeof slicc.lick === 'function') {
-      setStatusDot('slicc');
-      updateNote('Powered by SLICC · responses from sliccy');
-    } else {
-      setStatusDot('api');
-      updateNote('Powered by Claude · enter API key on first use');
-    }
+    setStatusDot('api');
+    updateNote('Powered by Claude · enter API key on first use');
   })();
 
   function updateNote(text) {
@@ -276,7 +252,7 @@
     if (id) div.id = id;
     var bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
-    bubble.innerHTML = text.replace(/\n/g, '<br.�M�');
+    bubble.innerHTML = text.replace(/\n/g, '<br>');
     div.appendChild(bubble);
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
