@@ -919,9 +919,7 @@ function escHtml(s) {
   ctx.textAlign = 'center';
   months.forEach(function(m, i) { ctx.fillText(m, toX(i), H - 12); });
 
-  // Legend
-  var legX = w - 115;
-  var legY = pad.top;
+  // Legend — horizontal row at top of chart, above the plot area
   var legendItems = [
     { color: C.blue,   label: 'Assets' },
     { color: C.green,  label: 'Products' },
@@ -929,13 +927,16 @@ function escHtml(s) {
     { color: C.red,    label: 'Users' },
     { color: C.orange, label: 'Downloads' }
   ];
-  legendItems.forEach(function(item, i) {
+  ctx.font = '10px system-ui';
+  var legCursor = pad.left;
+  var legY = 12;
+  legendItems.forEach(function(item) {
     ctx.fillStyle = item.color;
-    ctx.fillRect(legX, legY + i * 22, 10, 10);
+    ctx.fillRect(legCursor, legY - 8, 10, 10);
     ctx.fillStyle = C.muted;
-    ctx.font = '11px system-ui';
     ctx.textAlign = 'left';
-    ctx.fillText(item.label, legX + 14, legY + i * 22 + 9);
+    ctx.fillText(item.label, legCursor + 13, legY);
+    legCursor += ctx.measureText(item.label).width + 28;
   });
 })();
 
